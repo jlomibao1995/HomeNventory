@@ -38,9 +38,9 @@ public class AccountService {
         
         try {
             db.insert(user);
+            return true;
         } catch (Exception e) {
             return false;
         }
-        return true;
     }
 }

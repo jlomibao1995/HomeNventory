@@ -35,6 +35,7 @@ public class LoginServlet extends HttpServlet {
             request.setAttribute("email", email);
             request.setAttribute("password", password);
             request.setAttribute("log", "invalid");
+            request.setAttribute("message", "Login invalid.");
             this.getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
             return;
         }

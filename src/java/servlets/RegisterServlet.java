@@ -31,12 +31,15 @@ public class RegisterServlet extends HttpServlet {
         String password = request.getParameter("password");
         
         boolean success = as.addUser(email, password, firstname, lastname);
-        String message = null;
         
-        if (success) {
-            message = "User successfully added.";
-            request.setAttribute("message", message);
+        if (!success) {
+            request.setAttribute("email", email);
+            request.setAttribute("firstname", firstname);
+            request.setAttribute("lastname", lastname);
+            request.setAttribute("password", password);
         }
+        
+        request.setAttribute("success", success);
         
         getServletContext().getRequestDispatcher("/WEB-INF/registration.jsp").forward(request, response);
     }

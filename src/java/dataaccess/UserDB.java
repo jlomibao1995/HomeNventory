@@ -30,8 +30,9 @@ public class UserDB {
             trans.begin();
             em.merge(user);
             trans.commit();
-        } finally {
+        } catch (Exception e) {
             trans.rollback();
+        } finally {
             em.close();
         }
     }

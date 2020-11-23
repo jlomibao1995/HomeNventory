@@ -4,6 +4,7 @@
     Author     : Jean
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -19,5 +20,8 @@
             <input type="submit" values="Login">
         </form>
         <a href="register">Register</a>
+        <c:if test="${message != null}">
+            <p>${message}</p>
+        </c:if>
     </body>
 </html>

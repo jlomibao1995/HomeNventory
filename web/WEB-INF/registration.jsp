@@ -16,8 +16,13 @@
             <label><input type="submit" value="Register"></label>
         </form>
         <a href="login">Login</a>
-        <c:if test="${message != null}">
-            <p>${message}</p>
-        </c:if>
+        <c:choose>
+            <c:when test="${success == true}">
+                <p>User added successfully</p>
+            </c:when>
+            <c:when test="${success == false}">
+                <p>Encountered Error: Make sure all requirements are entered.</p>
+            </c:when>
+        </c:choose>
     </body>
 </html>
