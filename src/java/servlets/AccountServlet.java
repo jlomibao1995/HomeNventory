@@ -1,7 +1,6 @@
 package servlets;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -14,49 +13,46 @@ import services.AccountService;
  *
  * @author Jean
  */
-public class LoginServlet extends HttpServlet {
+public class AccountServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String log = request.getParameter("log");
+        String edit = request.getParameter("edit");
         
-        if (log != null) {
-            HttpSession session = request.getSession();
-            session.invalidate();
-            request.setAttribute("message", "User successfully logged out.");
+        if (edit != null) {
+            request.setAttribute("edit", edit);
         }
         
-        getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
+        getServletContext().getRequestDispatcher("/WEB-INF/account.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String email = request.getParameter("email");
+        String firstName = request.getParameter("firstname");
+        String lastName = request.getParameter("lastname");
         String password = request.getParameter("password");
-        AccountService as = new AccountService();
+        String active = request.getParameter("active");
         
-        User user = as.login(email, password);
+        AccountService as = new AccountService();
+        User user = as.update(email, firstName, lastName, password, active);
         
         if (user == null) {
             request.setAttribute("email", email);
+            request.setAttribute("firstname", firstName);
+            request.setAttribute("lastname", lastName);
             request.setAttribute("password", password);
-            request.setAttribute("message", "Login invalid.");
-            this.getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
+            request.setAttribute("active", active);
+            request.setAttribute("edit", "edit");
+            getServletContext().getRequestDispatcher("/WEB-INF/account.jsp").forward(request, response);
             return;
         }
         
         HttpSession session = request.getSession();
-        session.setAttribute("email", email);
         session.setAttribute("user", user);
-        
-        if(user.getRole().getRoleId() == 2) {
-            response.sendRedirect("inventory");
-        }
-        else {
-            response.sendRedirect("admin");
-        }
+        getServletContext().getRequestDispatcher("/WEB-INF/account.jsp").forward(request, response);
     }
 
 }

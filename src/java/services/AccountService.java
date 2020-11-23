@@ -43,4 +43,45 @@ public class AccountService {
             return false;
         }
     }
+    
+    public User update(String email, String firstName, String lastName, String password, String active) {
+        if (firstName == null || firstName.equals("") || 
+                lastName == null || lastName.equals("") || password == null || password.equals("")) {
+            return null;
+        }
+        
+        try {
+            
+            UserDB ub = new UserDB();
+            User user = ub.getUser(email);
+            user.setFirstName(firstName);
+            user.setLastName(lastName);
+            user.setPassword(password);
+            
+            if (!active.equals("true")) {
+                user.setActive(false);
+            }
+            
+            ub.update(user); 
+            return user;
+            
+        } catch (Exception e) {
+            return null;
+        }
+    } 
+
+    public boolean delete(String email) {
+        if (email == null || email.equals("")) {
+            return false;
+        }
+
+        try {
+            UserDB ub = new UserDB();
+            User user = ub.getUser(email);
+            ub.delete(user);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
 }
