@@ -44,6 +44,9 @@
                     </select><br>
                     <input type="submit" value="Save">
                 </form>
+                <form action="account" method="get">
+                    <input type="submit" value="Cancel">
+                </form>
             </c:if>
         </div>
     </body>
