@@ -22,6 +22,13 @@ public class InventoryServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        HttpSession session = request.getSession();
+        AccountService as = new AccountService();
+        String email = (String) session.getAttribute("email");
+        User user = as.getUser(email);
+        request.setAttribute("user", user);
+        
         InventoryService is = new InventoryService();
         List<Category> categories = is.getCategories();
         request.setAttribute("categories", categories);
@@ -41,8 +48,11 @@ public class InventoryServlet extends HttpServlet {
             throws ServletException, IOException {
         String action = request.getParameter("action");
         InventoryService is = new InventoryService();
+        
         HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
+        AccountService as = new AccountService();
+        String email = (String) session.getAttribute("email");
+        User user = as.getUser(email);
         
         String itemName = request.getParameter("itemname");
         String price = request.getParameter("price");
@@ -63,7 +73,7 @@ public class InventoryServlet extends HttpServlet {
         
         if (updatedUser != null)
         {
-            session.setAttribute("user", updatedUser);
+            request.setAttribute("user", updatedUser);
             request.setAttribute("message", action);
         } else {
             request.setAttribute("message", "fail");

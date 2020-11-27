@@ -49,7 +49,6 @@ public class LoginServlet extends HttpServlet {
         
         HttpSession session = request.getSession();
         session.setAttribute("email", email);
-        session.setAttribute("user", user);
         
         if(user.getRole().getRoleId() == 2) {
             response.sendRedirect("inventory");

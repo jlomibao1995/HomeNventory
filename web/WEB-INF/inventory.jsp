@@ -1,5 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -18,35 +19,46 @@
 
         <div>
             <h2>Inventory for ${user.firstName} ${user.lastName}</h2>
-            <table>
-                <tr>
-                    <th>Category</th>
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>Delete</th>
-                    <th>Edit</th>
-                </tr>
-                <c:forEach var="item" items="${user.itemList}">
+            <table class="blueTable">
+                <thead>
                     <tr>
-                        <td>${item.category.categoryName}</td>
-                        <td>${item.itemName}</td>
-                        <td>${item.price}</td>
-                        <td>
-                            <form action="inventory" method="post">
-                                <input type="hidden" name="action" value="delete">
-                                <input type="hidden" name="itemid" value="${item.itemId}">
-                                <input type="submit" value="Delete">
-                            </form>
-                        </td>
-                        <td>
-                            <form action="inventory" method="get">
-                                <input type="hidden" name="action" value="edit">
-                                <input type="hidden" name="itemedit" value="${item.itemId}">
-                                <input type="submit" value="Edit">
-                            </form>
+                        <th>Category</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Delete</th>
+                        <th>Edit</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <td colspan="3">
+                            <div class="links"><a href="#">&laquo;</a> <a class="active" href="#">1</a> <a href="#">2</a> <a href="#">3</a> <a href="#">4</a> <a href="#">&raquo;</a></div>
                         </td>
                     </tr>
-                </c:forEach>
+                </tfoot>
+                <tbody>
+                    <c:forEach var="item" items="${user.itemList}">
+                        <tr>
+                            <td>${item.category.categoryName}</td>
+                            <td>${item.itemName}</td>
+                            <td><fmt:formatNumber value="${item.price}" type="currency" /></td>
+                            <td>
+                                <form action="inventory" method="post">
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="itemid" value="${item.itemId}">
+                                    <input type="submit" value="Delete">
+                                </form>
+                            </td>
+                            <td>
+                                <form action="inventory" method="get">
+                                    <input type="hidden" name="action" value="edit">
+                                    <input type="hidden" name="itemedit" value="${item.itemId}">
+                                    <input type="submit" value="Edit">
+                                </form>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
             </table>
         </div>
 
@@ -74,12 +86,12 @@
                 </c:choose>
                 <input type="submit" value="Save">
             </form>
-                <c:choose>
-                    <c:when test="${message eq 'add'}"><p>Item added.</p></c:when>
-                    <c:when test="${message eq 'save'}"><p>Item updated.</p></c:when>
-                    <c:when test="${message eq 'delete'}"><p>Item deleted.</p></c:when>
-                    <c:when test="${message eq 'fail'}"><p>Error: Make sure all required fields are entered.</p></c:when>
-                </c:choose>
+            <c:choose>
+                <c:when test="${message eq 'add'}"><p>Item added.</p></c:when>
+                <c:when test="${message eq 'save'}"><p>Item updated.</p></c:when>
+                <c:when test="${message eq 'delete'}"><p>Item deleted.</p></c:when>
+                <c:when test="${message eq 'fail'}"><p>Error: Make sure all required fields are entered properly.</p></c:when>
+            </c:choose>
         </div>
     </body>
 </html>

@@ -26,6 +26,48 @@ public class InventoryService {
         }
     }
      
+     public Category getCategory(String id) {
+         CategoryDB cb = new CategoryDB();
+          try {
+              int categoryId = Integer.parseInt(id);
+              Category category = cb.getCategory(categoryId);
+              return category;
+          } catch (Exception e) {
+              return null;
+          }
+     }
+     
+     public boolean addCategory(String categoryName) {
+         if (categoryName == null || categoryName.equals("")) {
+             return false;
+         }
+         
+         CategoryDB cb = new CategoryDB();
+         
+         try {
+             Category category = new Category(0, categoryName);
+             cb.insert(category);
+             return true;
+         } catch (Exception e) {
+             return false;
+         }
+     }
+     
+     public boolean updateCategory(String categoryId, String categoryName) {
+         if (categoryName == null || categoryName.equals("")) {
+             return false;
+         }
+         
+         try {
+             int id = Integer.parseInt(categoryId);
+             CategoryDB cb = new CategoryDB();
+             cb.update(new Category(id, categoryName));
+             return true;
+         } catch (Exception e) {
+             return false;
+         }
+     }
+     
      public Item getItem(String itemId) {
          int id = Integer.parseInt(itemId);
          ItemDB ib = new ItemDB();

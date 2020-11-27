@@ -2,6 +2,7 @@ package dataaccess;
 
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import model.Category;
 
 /**
@@ -27,6 +28,36 @@ public class CategoryDB {
         try {
             Category category = em.find(Category.class, categoryId);
             return category;
+        } finally {
+            em.close();
+        }
+    }
+    
+    public void insert(Category category) {
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        EntityTransaction trans = em.getTransaction();
+        
+        try {
+            trans.begin();
+            em.persist(category);
+            trans.commit();
+        } catch (Exception e) {
+            trans.rollback();
+        } finally {
+            em.close();
+        }
+    }
+    
+    public void update(Category category) {
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        EntityTransaction trans = em.getTransaction();
+        
+        try {
+            trans.begin();
+            em.merge(category);
+            trans.commit();
+        } catch (Exception e) {
+            trans.rollback();
         } finally {
             em.close();
         }

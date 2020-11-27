@@ -18,6 +18,13 @@ public class AccountServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        HttpSession session = request.getSession();
+        AccountService as = new AccountService();
+        String email = (String) session.getAttribute("email");
+        User user = as.getUser(email);
+        request.setAttribute("user", user);
+        
         String edit = request.getParameter("edit");
         
         if (edit != null) {
