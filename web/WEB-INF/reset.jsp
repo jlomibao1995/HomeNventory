@@ -15,7 +15,7 @@
         </form>
         <c:choose>
             <c:when test="${action eq 'requestreset'}"><p>If the address you entered is valid, you will receive an email very soon.
-                    Please check your email for your password.</p></c:when>
+                    Please check your email to reset your password.</p></c:when>
             <c:when test="${action eq 'fail'}"><p>Error: Make sure all fields are entered correctly.</p></c:when>
             <c:otherwise></c:otherwise>
         </c:choose>
