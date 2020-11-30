@@ -22,24 +22,24 @@ public class InventoryServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         HttpSession session = request.getSession();
         AccountService as = new AccountService();
         String email = (String) session.getAttribute("email");
         User user = as.getUser(email);
         request.setAttribute("user", user);
-        
+
         InventoryService is = new InventoryService();
         List<Category> categories = is.getCategories();
         request.setAttribute("categories", categories);
-        
+
         String itemId = request.getParameter("itemedit");
-        
+
         if (itemId != null) {
             Item item = is.getItem(itemId);
             request.setAttribute("itemedit", item);
-        }        
-        
+        }
+
         getServletContext().getRequestDispatcher("/WEB-INF/inventory.jsp").forward(request, response);
     }
 
@@ -48,38 +48,39 @@ public class InventoryServlet extends HttpServlet {
             throws ServletException, IOException {
         String action = request.getParameter("action");
         InventoryService is = new InventoryService();
-        
+
         HttpSession session = request.getSession();
-        AccountService as = new AccountService();
         String email = (String) session.getAttribute("email");
-        User user = as.getUser(email);
-        
+
         String itemName = request.getParameter("itemname");
         String price = request.getParameter("price");
         String category = request.getParameter("categoryId");
         String itemId = request.getParameter("itemid");
-        User updatedUser = null; 
-        
-        switch(action) {
+        boolean success = false;
+
+        switch (action) {
             case "add":
-                updatedUser = is.addItem(user, itemName, price, category);
+                success = is.addItem(email, itemName, price, category);
                 break;
-            case "save": 
-                updatedUser = is.updateItem(itemId, itemName, price, category);
+            case "save":
+                success = is.updateItem(email, itemId, itemName, price, category);
+                
+                if (!success) {
+                    Item item = is.getItem(itemId);
+                    request.setAttribute("itemedit", item);
+                }
                 break;
             case "delete":
-                updatedUser = is.deleteItem(itemId, user);
+                success = is.deleteItem(itemId, email);
         }
-        
-        if (updatedUser != null)
-        {
-            request.setAttribute("user", updatedUser);
+
+        if (success) {
             request.setAttribute("message", action);
         } else {
             request.setAttribute("message", "fail");
         }
-        
-        this.doGet(request, response);
+
+        doGet(request, response);
     }
 
 }

@@ -28,6 +28,20 @@ public class UserDB {
         return user;
     }
     
+    public User getUserByActivateUUID(String uuid) {
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        
+        try {
+            User user = em.createNamedQuery("User.findByActivateUserUuid", User.class).setParameter("activateUserUuid", uuid).getSingleResult();
+            return user;
+        } catch (Exception e) {
+            Logger.getLogger(UserDB.class.getName()).log(Level.WARNING, "Could not return result for {0}", uuid);
+            return null;
+        } finally {
+            em.close();
+        }
+    }
+    
     public List<User> getAll() {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
         List<User> users = null;

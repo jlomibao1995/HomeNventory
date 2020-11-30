@@ -13,10 +13,17 @@ import services.AccountService;
  * @author Jean
  */
 public class RegisterServlet extends HttpServlet {
-    
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String uuid = request.getParameter("uuid");
+
+        if (uuid != null) {
+            AccountService as = new AccountService();
+            boolean activated = as.activateUser(uuid);
+            request.setAttribute("activated", activated);
+        }
         getServletContext().getRequestDispatcher("/WEB-INF/registration.jsp").forward(request, response);
     }
 
@@ -29,18 +36,21 @@ public class RegisterServlet extends HttpServlet {
         String firstname = request.getParameter("firstname");
         String lastname = request.getParameter("lastname");
         String password = request.getParameter("password");
-        
-        boolean success = as.addUser(email, password, firstname, lastname);
-        
+
+        String path = getServletContext().getRealPath("/WEB-INF");
+        String url = request.getRequestURL().toString();
+
+        boolean success = as.registerUser(email, password, firstname, lastname, path, url);
+
         if (!success) {
             request.setAttribute("email", email);
             request.setAttribute("firstname", firstname);
             request.setAttribute("lastname", lastname);
             request.setAttribute("password", password);
         }
-        
+
         request.setAttribute("success", success);
-        
+
         getServletContext().getRequestDispatcher("/WEB-INF/registration.jsp").forward(request, response);
     }
 
