@@ -14,6 +14,7 @@
             <input type="submit" values="Login">
         </form>
         <a href="register">Register</a>
+        <a href="reset">Forgot password</a>
         <c:if test="${message != null}">
             <p>${message}</p>
         </c:if>

@@ -108,6 +108,45 @@ public class AccountService {
             return false;
         }
     }
+    
+        public boolean resetPassword(String email, String path, String url) {
+        UserDB ub = new UserDB();
+        try {
+            User user = ub.getUser(email);
+            String uuid = UUID.randomUUID().toString();
+            user.setResetPasswordUuid(uuid);
+            ub.update(user);
+            
+            String subject = "Home nVentory Password Reset";
+            String template = path + "/emailtemplates/resetpassword.html";
+            String link = url + "?uuid=" + uuid;
+            
+            HashMap<String, String> tags = new HashMap<>();
+            tags.put("firstname", user.getFirstName());
+            tags.put("lastname", user.getLastName());
+            tags.put("link", link);
+            
+            GmailService.sendMail(email, subject, template, tags);
+            return true;
+            
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    
+    public boolean changePassword(String uuid, String password)
+    {
+        UserDB ub = new UserDB();
+        try {
+            User user = ub.getUserByUUID(uuid);
+            user.setPassword(password);
+            user.setResetPasswordUuid(null);
+            ub.update(user);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
     public User update(String email, String firstName, String lastName, String password, String active) {
         if (firstName == null || firstName.equals("")
