@@ -32,6 +32,14 @@
         <filter-name>AdminFilter</filter-name>
         <servlet-name>CategoriesServlet</servlet-name>
     </filter-mapping>
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <servlet-name>SearchInventoryServlet</servlet-name>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>AdminFilter</filter-name>
+        <servlet-name>SearchInventoryServlet</servlet-name>
+    </filter-mapping>
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
         <servlet-class>servlets.LoginServlet</servlet-class>
@@ -60,6 +68,10 @@
         <servlet-name>ResetPasswordServlet</servlet-name>
         <servlet-class>servlets.ResetPasswordServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SearchInventoryServlet</servlet-name>
+        <servlet-class>servlets.SearchInventoryServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/login</url-pattern>
@@ -87,6 +99,10 @@
     <servlet-mapping>
         <servlet-name>ResetPasswordServlet</servlet-name>
         <url-pattern>/reset</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SearchInventoryServlet</servlet-name>
+        <url-pattern>/search</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

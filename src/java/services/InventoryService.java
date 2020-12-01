@@ -3,6 +3,7 @@ package services;
 import dataaccess.CategoryDB;
 import dataaccess.ItemDB;
 import dataaccess.UserDB;
+import java.util.ArrayList;
 import java.util.List;
 import model.Category;
 import model.Item;
@@ -77,6 +78,38 @@ public class InventoryService {
         } catch (Exception e) {
             return null;
         }
+    }
+    
+    public List<Item> getItems() {
+        ItemDB ib = new ItemDB();
+        
+        try {
+            List<Item> items = ib.getAll();
+            return items;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+    
+    public List<Item> getItems(String key) {
+        ItemDB ib = new ItemDB();
+        
+        try {
+            List<Item> items = ib.getAll();
+            List<Item> searchItems = new ArrayList<>();
+            
+            for (Item item: items) {
+                if (item.getItemName().startsWith(key) || item.getItemName().contains(key)) {
+                    searchItems.add(item);
+                }
+            }
+            
+            return searchItems;
+        } catch (Exception e) {
+            return null;
+        }
+        
+        
     }
 
     public boolean addItem(String email, String itemName, String price, String category) {

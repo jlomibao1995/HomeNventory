@@ -1,5 +1,6 @@
 package dataaccess;
 
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import model.Item;
@@ -21,6 +22,21 @@ public class ItemDB {
             em.close();
         }
         return item;
+    }
+    
+    public List<Item> getAll() {
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        
+        try {
+            List<Item> items = em.createNamedQuery("Item.findAll", Item.class).getResultList();
+            return items;
+        } catch (Exception e) {
+
+        }finally {
+            em.close();
+        }
+        
+        return null;
     }
     
     public void insert(Item item) {

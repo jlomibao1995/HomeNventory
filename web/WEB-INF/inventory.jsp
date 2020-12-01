@@ -8,17 +8,17 @@
         <title>Home Inventory</title>
     </head>
     <body>
+        <h1>Home nVentory</h1>
         <div>
-            <h1>Home nVentory</h1>
             <h2>Menu</h2>
             <a href="inventory">Inventory</a><br>
             <a href="admin">Admin</a><br>
             <a href="account">Account</a><br>
             <a href="login?log=logout">Logout</a><br>
         </div>
-
+        <h2>Inventory</h2>
         <div>
-            <h2>Inventory for ${user.firstName} ${user.lastName}</h2>
+            <h3>Inventory for ${user.firstName} ${user.lastName}</h3>
             <table class="blueTable">
                 <thead>
                     <tr>
@@ -64,8 +64,8 @@
 
         <div>
             <c:choose>
-                <c:when test="${itemedit == null}"><h2>Add Item</h2></c:when>
-                <c:when test="${itemedit != null}"><h2>Edit</h2></c:when>
+                <c:when test="${itemedit == null}"><h3>Add Item</h3></c:when>
+                <c:when test="${itemedit != null}"><h3>Edit</h3></c:when>
             </c:choose>
             <form action="inventory" method="post">
                 Category:<select name="categoryId">
@@ -85,6 +85,9 @@
                     </c:when>
                 </c:choose>
                 <input type="submit" value="Save">
+            </form>
+            <form action="categories" method="get">
+                <input type="submit" value="Cancel">
             </form>
             <c:choose>
                 <c:when test="${message eq 'add'}"><p>Item added.</p></c:when>

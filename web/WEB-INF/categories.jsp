@@ -7,20 +7,20 @@
         <title>Home Inventory</title>
     </head>
     <body>
-        <h1>Categories</h1>
-
+        <h1>Home nVentory</h1>
         <div>
-            <h1>Home nVentory</h1>
             <h2>Menu</h2>
             <a href="inventory">Inventory</a><br>
             <a href="admin">Admin</a><br>
             <a href="account">Account</a><br>
             <a href="login?log=logout">Logout</a><br>
-            <a href="categories">Manage Categories</a>
+            <h2>Admin Menu</h2>
+            <a href="categories">Manage Categories</a><br>
+            <a href="search">App Inventory</a>
         </div>
-
+        <h2>Categories</h2>
         <div>
-            <h2>Manage Categories</h2>
+            <h3>Manage Categories</h3>
             <table>
                 <tr>
                     <td>Category Id</td>
@@ -45,7 +45,7 @@
 
         <div>
             <c:if test="${category == null}">
-                <h2>Add Category</h2>
+                <h3>Add Category</h3>
                 <form action="categories" method="post">
                     <input type="text" name="categoryName"><br>
                     <input type="hidden" name="action" value="add">
@@ -54,7 +54,7 @@
             </c:if>
 
             <c:if test="${category != null}">
-                <h2>Edit Category Name</h2>
+                <h3>Edit Category Name</h3>
                 <form action="categories" method="post">
                     <input type="text" name="categoryId" value="${category.categoryId}" readonly><br>
                     <input type="text" name="categoryName" value="${category.categoryName}"><br>

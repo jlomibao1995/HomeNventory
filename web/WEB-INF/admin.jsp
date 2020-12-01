@@ -7,21 +7,20 @@
         <title>Home Inventory</title>
     </head>
     <body>
-        <h1>Admin</h1>
-
+        <h1>Home nVentory</h1>
         <div>
-            <h1>Home nVentory</h1>
             <h2>Menu</h2>
             <a href="inventory">Inventory</a><br>
             <a href="admin">Admin</a><br>
             <a href="account">Account</a><br>
             <a href="login?log=logout">Logout</a><br>
-            <a href="categories">Manage Categories</a>
-
+            <h2>Admin Menu</h2>
+            <a href="categories">Manage Categories</a><br>
+            <a href="search">App Inventory</a>
         </div>
-
+        <h2>Admin</h2>
         <div>
-            <h2>Manage Users</h2>
+            <h3>Manage Users</h3>
             <table>
                 <tr>
                     <th>Email</th>
@@ -54,7 +53,7 @@
         </div>
 
         <c:if test="${updateUser == null}">
-            <h2>Add User</h2>
+            <h3>Add User</h3>
             <form action="admin" method="post">
                 Email: <input type="text" name="userEmail"><br>
                 First Name: <input type="text" name="firstname"><br>
@@ -66,7 +65,7 @@
         </c:if>
 
         <c:if test="${updateUser != null}">
-            <h2>Edit User</h2>
+            <h3>Edit User</h3>
             <form action="admin" method="post">
                 Email: <input type="text" name="userEmail" readonly value="${updateUser.email}"><br>
                 First Name: <input type="text" name="firstname" value="${updateUser.firstName}"><br>
@@ -94,6 +93,9 @@
                 </select><br>
                 <input hidden="hidden" name="action" value="edit">
                 <input type="submit" value="Save">
+            </form>
+            <form action="admin" method="get">
+                <input type="submit" value="Cancel">
             </form>
         </c:if>
 
