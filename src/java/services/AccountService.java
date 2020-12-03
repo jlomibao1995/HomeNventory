@@ -2,6 +2,7 @@ package services;
 
 import dataaccess.RoleDB;
 import dataaccess.UserDB;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -20,11 +21,22 @@ public class AccountService {
         if (email == null || email.equals("") || password.equals("") || password == null) {
             return null;
         }
+        
         UserDB ub = new UserDB();
         User user = ub.getUser(email);
 
-        if (user != null && user.getPassword().equals(password) && user.getActive()) {
-            return user;
+        if (user != null && user.getActive()) {
+            try {
+                String salt = user.getSalt();
+                String hashPasswordAndSalt = PasswordUtil.hashAndSaltPassword(password, salt);
+                
+                if (user.getPassword().equals(hashPasswordAndSalt)) {
+                    return user;
+                }
+                return null;
+            } catch (NoSuchAlgorithmException ex) {
+                Logger.getLogger(AccountService.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return null;
     }
@@ -48,12 +60,15 @@ public class AccountService {
             return false;
         }
 
-        User user = new User(email, true, firstName, lastName, password);
-        Role r = new Role(2);
-        user.setRole(r);
-        UserDB db = new UserDB();
-
         try {
+            String salt = PasswordUtil.getSalt();
+            String hashPassword = PasswordUtil.hashAndSaltPassword(password, salt);
+
+            User user = new User(email, true, firstName, lastName, salt, hashPassword);
+            Role r = new Role(2);
+            user.setRole(r);
+            UserDB db = new UserDB();
+
             db.insert(user);
             return true;
         } catch (Exception e) {
@@ -67,24 +82,27 @@ public class AccountService {
             return false;
         }
 
-        User user = new User(email, false, firstName, lastName, password);
-        Role r = new Role(2);
-        user.setRole(r);
-
-        String uuid = UUID.randomUUID().toString();
-        user.setActivateUserUuid(uuid);
-        UserDB db = new UserDB();
-
-        String subject = "Home nVentory App Activate Account";
-        String template = path + "/emailtemplates/activate.html";
-        String link = url + "?uuid=" + uuid;
-
-        HashMap<String, String> tags = new HashMap<>();
-        tags.put("firstname", user.getFirstName());
-        tags.put("lastname", user.getLastName());
-        tags.put("link", link);
-
         try {
+            String salt = PasswordUtil.getSalt();
+            String hashPassword = PasswordUtil.hashAndSaltPassword(password, salt);
+            
+            User user = new User(email, false, firstName, lastName, salt, hashPassword);
+            Role r = new Role(2);
+            user.setRole(r);
+
+            String uuid = UUID.randomUUID().toString();
+            user.setActivateUserUuid(uuid);
+            UserDB db = new UserDB();
+
+            String subject = "Home nVentory App Activate Account";
+            String template = path + "/emailtemplates/activate.html";
+            String link = url + "?uuid=" + uuid;
+
+            HashMap<String, String> tags = new HashMap<>();
+            tags.put("firstname", user.getFirstName());
+            tags.put("lastname", user.getLastName());
+            tags.put("link", link);
+
             db.insert(user);
             GmailService.sendMail(email, subject, template, tags);
             return true;

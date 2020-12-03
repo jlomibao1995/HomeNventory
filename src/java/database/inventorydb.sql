@@ -26,7 +26,8 @@ CREATE TABLE IF NOT EXISTS `inventorydb`.`user` (
   `active` TINYINT(1) NOT NULL DEFAULT '1',
   `first_name` VARCHAR(20) NOT NULL,
   `last_name` VARCHAR(20) NOT NULL,
-  `password` VARCHAR(20) NOT NULL,
+  `salt` CHAR(64) NOT NULL,
+  `password` CHAR(64) NOT NULL,
   `role` INT(11) NOT NULL,
   `reset_password_uuid` VARCHAR(50),
   `activate_user_uuid` VARCHAR(50),
@@ -72,14 +73,14 @@ INSERT INTO `category` (`category_name`) VALUES ('utility room');
 INSERT INTO `category` (`category_name`) VALUES ('storage');
 INSERT INTO `category` (`category_name`) VALUES ('other');
 
-INSERT INTO `user` (`email`,`active`,`first_name`,`last_name`,`password`,`role`)
-	VALUES ('cprg352+admin@gmail.com', true, 'Admin','Admin', 'password', 1);
-INSERT INTO `user` (`email`,`active`,`first_name`,`last_name`,`password`,`role`)
-	VALUES ('cprg352+admin2@gmail.com', true, 'Admin2','Admin2', 'password', 3);
-INSERT INTO `user` (`email`,`active`,`first_name`,`last_name`,`password`,`role`)
-	VALUES ('cprg352+anne@gmail.com', true, 'Anne','Annerson', 'password', 2);
-INSERT INTO `user` (`email`,`active`,`first_name`,`last_name`,`password`,`role`)
-	VALUES ('cprg352+barb@gmail.com', true, 'Barb','Barber', 'password', 2);
+INSERT INTO `user` (`email`,`active`,`first_name`,`last_name`,`password`,`salt`,`role`)
+	VALUES ('cprg352+admin@gmail.com', true, 'Admin','Admin', '9328cf33549e378c1982c6b61f7fcb431e9ac8c9afba8511c3ba0dbaf4193dc6', 'NeZRJMuFfiSQjZ+CpNH1Z23fI7X7EEUWTC/4x7Cv9P0=', 1);
+INSERT INTO `user` (`email`,`active`,`first_name`,`last_name`,`password`,`salt`,`role`)
+	VALUES ('cprg352+admin2@gmail.com', true, 'Admin2','Admin2', 'b738b0b8418ff006832c260db40d535cc06d01533c42fe6dd3d6640b9ef4afbc', 'a9hEZ+l5tn4UjYU0l6eRICyAWODlvyBdSAVy4TX+rm0=', 3);
+INSERT INTO `user` (`email`,`active`,`first_name`,`last_name`,`password`,`salt`,`role`)
+	VALUES ('cprg352+anne@gmail.com', true, 'Anne','Annerson', 'a4a6860684f8381fb90c7e5bc43a9e13964f37fd86bca6258e05c07df11845fe', 'UJ+g7vrgAMj4yZB6LKGxdJdi3RXELSu6a4ZvoJOd7rY=', 2);
+INSERT INTO `user` (`email`,`active`,`first_name`,`last_name`,`password`,`salt`,`role`)
+	VALUES ('cprg352+barb@gmail.com', true, 'Barb','Barber', '2698a1b2e328e9d220d4326394f70198d70ea4f56b3c157ca1dbd794239591dd', 'L1VFEqhswZ36AQMUKJdFahAiCoN10k9LlrCxUKdM5Ks=', 2);
 
 INSERT INTO `item` (`category`,`item_name`,`price`,`owner`) VALUES (1, 'blender',29.99,'cprg352+anne@gmail.com');
 INSERT INTO `item` (`category`,`item_name`,`price`,`owner`) VALUES (1, 'toaster',19.99,'cprg352+anne@gmail.com');
