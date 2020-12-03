@@ -18,19 +18,19 @@ public class AccountServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         HttpSession session = request.getSession();
         AccountService as = new AccountService();
         String email = (String) session.getAttribute("email");
         User user = as.getUser(email);
         request.setAttribute("user", user);
-        
+
         String edit = request.getParameter("edit");
-        
+
         if (edit != null) {
             request.setAttribute("edit", edit);
         }
-        
+
         getServletContext().getRequestDispatcher("/WEB-INF/account.jsp").forward(request, response);
     }
 
@@ -41,24 +41,25 @@ public class AccountServlet extends HttpServlet {
         String firstName = request.getParameter("firstname");
         String lastName = request.getParameter("lastname");
         String password = request.getParameter("password");
+        String confirmPassword = request.getParameter("confirmPassword");
         String active = request.getParameter("active");
-        
+
         AccountService as = new AccountService();
-        User user = as.update(email, firstName, lastName, password, active);
-        
+        User user = as.updateAccount(email, firstName, lastName, password, confirmPassword, active);
+
         if (user == null) {
-            request.setAttribute("email", email);
-            request.setAttribute("firstname", firstName);
-            request.setAttribute("lastname", lastName);
-            request.setAttribute("password", password);
-            request.setAttribute("active", active);
+            HttpSession session = request.getSession();
+            String editEmail = (String) session.getAttribute("email");
+            user = as.getUser(editEmail);
+            request.setAttribute("user", user);
             request.setAttribute("edit", "edit");
+            request.setAttribute("result", "fail");
             getServletContext().getRequestDispatcher("/WEB-INF/account.jsp").forward(request, response);
             return;
         }
-        
-        HttpSession session = request.getSession();
-        session.setAttribute("user", user);
+
+        request.setAttribute("result", "success");
+        request.setAttribute("user", user);
         getServletContext().getRequestDispatcher("/WEB-INF/account.jsp").forward(request, response);
     }
 

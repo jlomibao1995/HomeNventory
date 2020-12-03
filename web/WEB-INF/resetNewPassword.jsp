@@ -9,7 +9,8 @@
     <body>
         <h1>Enter a new password</h1>
         <form method="post" aciton="reset">
-            <input type="text" name="newpassword"><br>
+            Password: <input type="text" name="newpassword"><br>
+            Confirm Password: <input type="text" name="confirmpassword"><br>
             <input type="hidden" name="uuid" value="${uuid}">
             <input type="hidden" name="action" value="setpassword">
             <input type="submit" value="submit">

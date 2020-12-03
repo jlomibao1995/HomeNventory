@@ -62,7 +62,7 @@ public class AdminServlet extends HttpServlet {
             case "edit":
                 String roleId = request.getParameter("roleId");
                 String active = request.getParameter("active");
-                User user = as.update(email, firstName, lastNmae, password, active, roleId);
+                User user = as.updateUser(email, firstName, lastNmae, password, active, roleId);
 
                 if (user != null) {
                     success = true;

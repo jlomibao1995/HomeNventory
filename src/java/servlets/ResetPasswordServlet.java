@@ -52,8 +52,9 @@ public class ResetPasswordServlet extends HttpServlet {
                 return;
             case "setpassword":
                 String newPassword = request.getParameter("newpassword");
+                String confirmPassword = request.getParameter("confirmpassword");
                 String uuid = request.getParameter("uuid");
-                success = as.changePassword(uuid, newPassword);
+                success = as.changePassword(uuid, newPassword, confirmPassword);
                 
                 if (!success) {
                     request.setAttribute("action", "fail");

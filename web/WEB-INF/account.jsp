@@ -16,13 +16,16 @@
             <a href="login?log=logout">Logout</a><br>
         </div>
 
-        <c:if test="${edit == null}">
+        <div>
+            <c:if test="${edit == null}">
             <h2>Account Information</h2>
             <p>Name: ${user.firstName} ${user.lastName}</p>
             <p>Email: ${user.email}</p>
             <p>Role: ${user.role.roleName}</p>
             <a href="account?edit=edit">Edit Information</a>
         </c:if>
+        </div>
+        <c:if test="${result eq 'success'}">Account information updated.</c:if>
 
         <div>
             <c:if test="${edit eq 'edit'}">
@@ -30,7 +33,8 @@
                     Email: <input type="text" name="email" value="${user.email}" readonly><br>
                     First Name: <input type="text" name="firstname" value="${user.firstName}"><br>
                     Last Name: <input type="text" name="lastname" value="${user.lastName}"><br>
-                    Password: <input type="text" name="password" value="${user.password}"><br>
+                    Password: <input type="text" name="password" placeholder="Enter new password or keep blank"><br>
+                    Confirm Password: <input type="text" name="confirmPassword" placeholder="Enter password"><br>
                     Active: <select name="active">
                         <option value="${true}" 
                                 <c:if test="${user.active == true}">
@@ -49,5 +53,6 @@
                 </form>
             </c:if>
         </div>
+        <c:if test="${result eq 'fail'}">Account information could not be updated.</c:if>
     </body>
 </html>

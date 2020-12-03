@@ -70,7 +70,7 @@
                 Email: <input type="text" name="userEmail" readonly value="${updateUser.email}"><br>
                 First Name: <input type="text" name="firstname" value="${updateUser.firstName}"><br>
                 Last name: <input type="text" name="lastname" value="${updateUser.lastName}"><br>
-                Password: <input type="text" name="password" value="${updateUser.password}"><br>
+                Password: <input type="text" name="password" placeholder="Enter new password"><br>
                 Role <select name="roleId">
                     <c:forEach var="role" items="${roles}">
                         <option value="${role.roleId}"

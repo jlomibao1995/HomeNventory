@@ -152,12 +152,18 @@ public class AccountService {
         }
     }
     
-    public boolean changePassword(String uuid, String password)
+    public boolean changePassword(String uuid, String password, String confirmPassword)
     {
+        if (password == null || !password.equals(confirmPassword)) {
+            return false;
+        }
+        
         UserDB ub = new UserDB();
         try {
             User user = ub.getUserByUUID(uuid);
-            user.setPassword(password);
+            String salt = user.getSalt();
+            String hashPassword = PasswordUtil.hashAndSaltPassword(password, salt);
+            user.setPassword(hashPassword);
             user.setResetPasswordUuid(null);
             ub.update(user);
             return true;
@@ -166,19 +172,26 @@ public class AccountService {
         }
     }
 
-    public User update(String email, String firstName, String lastName, String password, String active) {
-        if (firstName == null || firstName.equals("")
-                || lastName == null || lastName.equals("") || password == null || password.equals("")) {
+    public User updateAccount(String email, String firstName, String lastName, String password, String confirmPassword, String active) {
+        if (firstName == null || firstName.equals("") || lastName == null || lastName.equals("")) {
             return null;
         }
 
+        if (!password.equals(confirmPassword)) {
+            return null;
+        }
         try {
 
             UserDB ub = new UserDB();
             User user = ub.getUser(email);
             user.setFirstName(firstName);
             user.setLastName(lastName);
-            user.setPassword(password);
+
+            if (password != null) {
+                String salt = user.getSalt();
+                String hashPassword = PasswordUtil.hashAndSaltPassword(password, salt);
+                user.setPassword(hashPassword);
+            }
 
             if (!active.equals("true")) {
                 user.setActive(false);
@@ -192,7 +205,7 @@ public class AccountService {
         }
     }
 
-    public User update(String email, String firstName, String lastName, String password, String active, String roleId) {
+    public User updateUser(String email, String firstName, String lastName, String password, String active, String roleId) {
         if (firstName == null || firstName.equals("")
                 || lastName == null || lastName.equals("") || password == null || password.equals("")) {
             return null;
@@ -204,7 +217,9 @@ public class AccountService {
             User user = ub.getUser(email);
             user.setFirstName(firstName);
             user.setLastName(lastName);
-            user.setPassword(password);
+            String salt = user.getSalt();
+            String hashPassword = PasswordUtil.hashAndSaltPassword(password, salt);
+            user.setPassword(hashPassword);
 
             if (active.equals("true")) {
                 user.setActive(true);
