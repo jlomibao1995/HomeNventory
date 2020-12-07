@@ -41,6 +41,10 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "User.findByActivateUserUuid", query = "SELECT u FROM User u WHERE u.activateUserUuid = :activateUserUuid")})
 public class User implements Serializable {
 
+    @JoinColumn(name = "company", referencedColumnName = "company_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Company company;
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -191,6 +195,14 @@ public class User implements Serializable {
     @Override
     public String toString() {
         return "model.User[ email=" + email + " ]";
+    }
+
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
     }
     
 }

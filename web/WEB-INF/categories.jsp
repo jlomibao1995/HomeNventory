@@ -15,6 +15,7 @@
             <a href="account">Account</a><br>
             <a href="login?log=logout">Logout</a><br>
             <h2>Admin Menu</h2>
+            <a href="admin">Manage Users</a><br>
             <a href="categories">Manage Categories</a><br>
             <a href="search">App Inventory</a>
         </div>
