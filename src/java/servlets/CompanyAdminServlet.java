@@ -17,35 +17,28 @@ import services.AccountService;
  *
  * @author Jean
  */
-public class AdminServlet extends HttpServlet {
+public class CompanyAdminServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        String email = (String) session.getAttribute("email");
         AccountService as = new AccountService();
-        List<User> users = as.getUsers();
-        request.setAttribute("users", users);
-
+        User user = as.getUser(email);
+        request.setAttribute("company", user.getCompany());
+        
+        List<User> companyUsers = user.getCompany().getUserList();
+        request.setAttribute("users", companyUsers);
+        
         String updateEmail = request.getParameter("updateEmail");
 
         if (updateEmail != null) {
-            User user = as.getUser(updateEmail);
-            request.setAttribute("updateUser", user);
-
-            List<Role> roles = as.getRoles();
-            request.setAttribute("roles", roles);
+            User updateUser = as.getUser(updateEmail);
+            request.setAttribute("updateUser", updateUser);
         }
-
-        String roleUser = request.getParameter("updateRole");
-        if (roleUser != null) {
-            User user = as.getUser(roleUser);
-            request.setAttribute("setCompany", user);
-        }
-
-        List<Company> companies = as.getCompanies();
-        request.setAttribute("companies", companies);
-
-        getServletContext().getRequestDispatcher("/WEB-INF/admin.jsp").forward(request, response);
+        
+        getServletContext().getRequestDispatcher("/WEB-INF/companyadmin.jsp").forward(request, response);
     }
 
     @Override
@@ -56,38 +49,30 @@ public class AdminServlet extends HttpServlet {
         String firstName = request.getParameter("firstname");
         String lastNmae = request.getParameter("lastname");
         String password = request.getParameter("password");
-        String roleUser = request.getParameter("roleUser");
-        String companyId = request.getParameter("companyId");
+        
+        HttpSession session = request.getSession();
+        String adminEmail = (String) session.getAttribute("email");
         AccountService as = new AccountService();
+        User user = as.getUser(adminEmail);
+        Company company = user.getCompany();
 
         boolean success = false;
 
         switch (action) {
             case "delete":
-                HttpSession session = request.getSession();
-                String accountEmail = (String) session.getAttribute("email");
-                success = as.delete(email, accountEmail);
+                success = as.deleteCompanyUser(email, adminEmail);
                 break;
             case "add":
-                success = as.addUser(email, password, firstName, lastNmae, companyId);
+                success = as.addCompanyUser(email, password, firstName, lastNmae, company);
                 break;
             case "edit":
                 String active = request.getParameter("active");
-                User user = as.updateUser(email, firstName, lastNmae, password, active);
+                User updateUser = as.updateUser(email, firstName, lastNmae, password, active);
 
-                if (user != null) {
+                if (updateUser != null) {
                     success = true;
                 }
                 break;
-            case "systemadmin":
-                success = as.changeRole(roleUser, 1, null);
-                break;
-            case "companyadmin":
-                success = as.changeRole(roleUser, 3, null);
-                break;
-            case "regularuser":
-                success = as.changeRole(roleUser, 2, companyId);
-
         }
 
         if (!success) {

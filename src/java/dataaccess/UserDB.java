@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import model.Company;
 import model.User;
 
 /**
@@ -70,16 +71,20 @@ public class UserDB {
     public void insert(User user) {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
         EntityTransaction trans = em.getTransaction();
-
+        
+        Company company = user.getCompany();
+        company.getUserList().add(user);
+        
         try {
             trans.begin();
-            em.merge(user);
+            em.persist(user);
+            em.merge(company);
             trans.commit();
         } catch (Exception e) {
             trans.rollback();
         } finally {
             em.close();
-        }
+        } 
     }
 
     public void update(User user) {
@@ -100,15 +105,19 @@ public class UserDB {
     public void delete(User user) {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
         EntityTransaction trans = em.getTransaction();
-
+        
+        Company company = user.getCompany();
+        company.getUserList().remove(user);
+        
         try {
             trans.begin();
             em.remove(em.merge(user));
+            em.merge(company);
             trans.commit();
         } catch (Exception e) {
             trans.rollback();
         } finally {
             em.close();
-        }
+        } 
     }
 }

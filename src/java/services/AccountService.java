@@ -1,13 +1,16 @@
 package services;
 
+import dataaccess.CompanyDB;
 import dataaccess.RoleDB;
 import dataaccess.UserDB;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.Company;
 import model.Role;
 import model.User;
 
@@ -21,7 +24,7 @@ public class AccountService {
         if (email == null || email.equals("") || password.equals("") || password == null) {
             return null;
         }
-        
+
         UserDB ub = new UserDB();
         User user = ub.getUser(email);
 
@@ -29,7 +32,7 @@ public class AccountService {
             try {
                 String salt = user.getSalt();
                 String hashPasswordAndSalt = PasswordUtil.hashAndSaltPassword(password, salt);
-                
+
                 if (user.getPassword().equals(hashPasswordAndSalt)) {
                     return user;
                 }
@@ -53,7 +56,7 @@ public class AccountService {
         return users;
     }
 
-    public boolean addUser(String email, String password, String firstName, String lastName) {
+    public boolean addUser(String email, String password, String firstName, String lastName, String companyId) {
 
         if (email == null || email.equals("") || firstName == null || firstName.equals("")
                 || lastName == null || lastName.equals("") || password == null || password.equals("")) {
@@ -67,9 +70,35 @@ public class AccountService {
             User user = new User(email, true, firstName, lastName, salt, hashPassword);
             Role r = new Role(2);
             user.setRole(r);
+            CompanyDB cd = new CompanyDB();
+            Company company = cd.getCompany(Integer.parseInt(companyId));
+            user.setCompany(company);
             UserDB db = new UserDB();
 
             db.insert(user);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean addCompanyUser(String email, String password, String firstName, String lastName, Company company) {
+        if (email == null || email.equals("") || firstName == null || firstName.equals("")
+                || lastName == null || lastName.equals("") || password == null || password.equals("")) {
+            return false;
+        }
+
+        try {
+            String salt = PasswordUtil.getSalt();
+            String hashPassword = PasswordUtil.hashAndSaltPassword(password, salt);
+
+            User user = new User(email, true, firstName, lastName, salt, hashPassword);
+            Role r = new Role(2);
+            user.setRole(r);
+            UserDB ud = new UserDB();
+            user.setCompany(company);
+
+            ud.insert(user);
             return true;
         } catch (Exception e) {
             return false;
@@ -85,7 +114,7 @@ public class AccountService {
         try {
             String salt = PasswordUtil.getSalt();
             String hashPassword = PasswordUtil.hashAndSaltPassword(password, salt);
-            
+
             User user = new User(email, false, firstName, lastName, salt, hashPassword);
             Role r = new Role(2);
             user.setRole(r);
@@ -111,13 +140,13 @@ public class AccountService {
             return false;
         }
     }
-    
+
     public boolean activateUser(String uuid) {
         UserDB ub = new UserDB();
         User user = ub.getUserByActivateUUID(uuid);
         user.setActive(true);
         user.setActivateUserUuid(null);
-        
+
         try {
             ub.update(user);
             return true;
@@ -126,38 +155,37 @@ public class AccountService {
             return false;
         }
     }
-    
-        public boolean resetPassword(String email, String path, String url) {
+
+    public boolean resetPassword(String email, String path, String url) {
         UserDB ub = new UserDB();
         try {
             User user = ub.getUser(email);
             String uuid = UUID.randomUUID().toString();
             user.setResetPasswordUuid(uuid);
             ub.update(user);
-            
+
             String subject = "Home nVentory Password Reset";
             String template = path + "/emailtemplates/resetpassword.html";
             String link = url + "?uuid=" + uuid;
-            
+
             HashMap<String, String> tags = new HashMap<>();
             tags.put("firstname", user.getFirstName());
             tags.put("lastname", user.getLastName());
             tags.put("link", link);
-            
+
             GmailService.sendMail(email, subject, template, tags);
             return true;
-            
+
         } catch (Exception e) {
             return false;
         }
     }
-    
-    public boolean changePassword(String uuid, String password, String confirmPassword)
-    {
-        if (password == null || !password.equals(confirmPassword)) {
+
+    public boolean changePassword(String uuid, String password, String confirmPassword) {
+        if (password == null || password.equals("") || !password.equals(confirmPassword)) {
             return false;
         }
-        
+
         UserDB ub = new UserDB();
         try {
             User user = ub.getUserByUUID(uuid);
@@ -187,7 +215,7 @@ public class AccountService {
             user.setFirstName(firstName);
             user.setLastName(lastName);
 
-            if (password != null) {
+            if (password != null && !password.equals("")) {
                 String salt = user.getSalt();
                 String hashPassword = PasswordUtil.hashAndSaltPassword(password, salt);
                 user.setPassword(hashPassword);
@@ -205,9 +233,9 @@ public class AccountService {
         }
     }
 
-    public User updateUser(String email, String firstName, String lastName, String password, String active, String roleId) {
+    public User updateUser(String email, String firstName, String lastName, String password, String active) {
         if (firstName == null || firstName.equals("")
-                || lastName == null || lastName.equals("") || password == null || password.equals("")) {
+                || lastName == null || lastName.equals("")) {
             return null;
         }
 
@@ -217,18 +245,18 @@ public class AccountService {
             User user = ub.getUser(email);
             user.setFirstName(firstName);
             user.setLastName(lastName);
-            String salt = user.getSalt();
-            String hashPassword = PasswordUtil.hashAndSaltPassword(password, salt);
-            user.setPassword(hashPassword);
+
+            if (password != null && !password.equals("")) {
+                String salt = user.getSalt();
+                String hashPassword = PasswordUtil.hashAndSaltPassword(password, salt);
+                user.setPassword(hashPassword);
+            }
 
             if (active.equals("true")) {
                 user.setActive(true);
             } else {
                 user.setActive(false);
             }
-
-            int id = Integer.parseInt(roleId);
-            user.setRole(new Role(id));
 
             ub.update(user);
             return user;
@@ -256,6 +284,56 @@ public class AccountService {
             return false;
         }
         return true;
+    }
+    
+    public boolean deleteCompanyUser(String email, String accountEmail) {
+        if (email == null || email.equals("")) {
+            return false;
+        }
+
+        try {
+            UserDB ud = new UserDB();
+            User user = ud.getUser(email);
+
+            if (user.getEmail().equals(accountEmail)) {
+                return false;
+            }
+            
+            CompanyDB cd = new CompanyDB();
+
+            cd.delete(user);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean changeRole(String email, int roleId, String companyId) {
+        UserDB ub = new UserDB();
+        User user = ub.getUser(email);
+
+        try {
+            if (companyId != null) {
+                int id = Integer.parseInt(companyId);
+                CompanyDB cb = new CompanyDB();
+                Company company = cb.getCompany(id);
+                user.setCompany(company);
+                cb.updateUser(user);
+            } else {
+                user.setRole(new Role(roleId));
+                ub.update(user);
+            }
+
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public List<Company> getCompanies() {
+        CompanyDB cb = new CompanyDB();
+        List<Company> companies = cb.getCompanies();
+        return companies;
     }
 
     public List<Role> getRoles() {

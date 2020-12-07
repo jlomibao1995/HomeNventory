@@ -20,13 +20,12 @@ import services.AccountService;
  *
  * @author Jean
  */
-public class AdminFilter implements Filter {
+public class CompanyAdminFilter implements Filter {
 
-    @Override
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain)
             throws IOException, ServletException {
-
+        
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpSession session = httpRequest.getSession();
         String email = (String) session.getAttribute("email");
@@ -37,21 +36,21 @@ public class AdminFilter implements Filter {
             HttpServletResponse httpResponse = (HttpServletResponse) response;
             httpResponse.sendRedirect("inventory");
             return;
-        } else if (user.getRole().getRoleId() == 3) {
+        } else if (user.getRole().getRoleId() == 1) {
             HttpServletResponse httpResponse = (HttpServletResponse) response;
-            httpResponse.sendRedirect("companyadmin");
+            httpResponse.sendRedirect("admin");
             return;
         }
-        
+
         chain.doFilter(request, response);
+
     }
 
-    @Override
     public void destroy() {
     }
 
-    @Override
     public void init(FilterConfig filterConfig) {
 
     }
+
 }
