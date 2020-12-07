@@ -109,6 +109,7 @@
                 Last name: <input type="text" name="lastname"><br>
                 Password: <input type="text" name="password"><br>
                 Company: <select name="companyId">
+                    <option value="0">None</option>
                     <c:forEach items="${companies}" var="company">
                         <option value="${company.companyId}">${company.companyName}</option>
                     </c:forEach>
@@ -151,6 +152,7 @@
             <c:when test="${message eq 'systemadmin'}"><p>User has been promoted to system admin.</p></c:when>
             <c:when test="${message eq 'regularuser'}"><p>User has been demoted to regular user.</p></c:when>
             <c:when test="${message eq 'companyadmin'}"><p>User role has been changed to company administrator.</p></c:when>
+            <c:when test="${message eq 'failcompanyadmin'}"><p>User cannot be a company admin without a company.</p></c:when>
             <c:when test="${message eq 'fail'}"><p>Error: Make sure all required fields are entered properly.</p></c:when>
         </c:choose>
     </body>

@@ -70,9 +70,13 @@ public class AccountService {
             User user = new User(email, true, firstName, lastName, salt, hashPassword);
             Role r = new Role(2);
             user.setRole(r);
-            CompanyDB cd = new CompanyDB();
-            Company company = cd.getCompany(Integer.parseInt(companyId));
-            user.setCompany(company);
+
+            if (!companyId.equals("0")) {
+                CompanyDB cd = new CompanyDB();
+                Company company = cd.getCompany(Integer.parseInt(companyId));
+                user.setCompany(company);
+            }
+
             UserDB db = new UserDB();
 
             db.insert(user);
@@ -141,7 +145,7 @@ public class AccountService {
         }
     }
 
-    public boolean activateUser(String uuid) {
+    public boolean activateUser(String uuid, String path, String url) {
         UserDB ub = new UserDB();
         User user = ub.getUserByActivateUUID(uuid);
         user.setActive(true);
@@ -149,6 +153,15 @@ public class AccountService {
 
         try {
             ub.update(user);
+            String subject = "Home nVentory App Activate Account";
+            String template = path + "/emailtemplates/activate.html";
+            String link = url + "?login=login";
+
+            HashMap<String, String> tags = new HashMap<>();
+            tags.put("firstname", user.getFirstName());
+            tags.put("lastname", user.getLastName());
+            tags.put("link", link);
+            GmailService.sendMail(user.getEmail(), subject, template, tags);
             return true;
         } catch (Exception e) {
             Logger.getLogger(AccountService.class.getName()).log(Level.SEVERE, null, e);
@@ -291,10 +304,11 @@ public class AccountService {
         User user = ub.getUser(email);
 
         try {
-
-                user.setRole(new Role(roleId));
-                ub.update(user);
-
+            if (user.getCompany() == null && roleId == 3) {
+                return false;
+            }
+            user.setRole(new Role(roleId));
+            ub.update(user);
 
             return true;
         } catch (Exception e) {

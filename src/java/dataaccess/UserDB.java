@@ -22,16 +22,16 @@ public class UserDB {
 
         } catch (Exception e) {
             Logger.getLogger(UserDB.class.getName()).log(Level.WARNING, "Could not return result for {0}", email);
-        }finally {
+        } finally {
             em.close();
         }
-        
+
         return user;
     }
-    
+
     public User getUserByActivateUUID(String uuid) {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
-        
+
         try {
             User user = em.createNamedQuery("User.findByActivateUserUuid", User.class).setParameter("activateUserUuid", uuid).getSingleResult();
             return user;
@@ -42,18 +42,18 @@ public class UserDB {
             em.close();
         }
     }
-    
+
     public User getUserByUUID(String uuid) {
-       EntityManager em = DBUtil.getEmFactory().createEntityManager();
-       User user = null;
-       try {
-           user = em.createNamedQuery("User.findByResetPasswordUuid", User.class).setParameter("resetPasswordUuid", uuid).getSingleResult();
-       } finally {
-           em.close();
-       }
-       return user;
+        EntityManager em = DBUtil.getEmFactory().createEntityManager();
+        User user = null;
+        try {
+            user = em.createNamedQuery("User.findByResetPasswordUuid", User.class).setParameter("resetPasswordUuid", uuid).getSingleResult();
+        } finally {
+            em.close();
+        }
+        return user;
     }
-    
+
     public List<User> getAll() {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
         List<User> users = null;
@@ -64,27 +64,30 @@ public class UserDB {
         } finally {
             em.close();
         }
-        
+
         return users;
     }
 
     public void insert(User user) {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
         EntityTransaction trans = em.getTransaction();
-        
-        Company company = user.getCompany();
-        company.getUserList().add(user);
-        
+
         try {
             trans.begin();
             em.persist(user);
-            em.merge(company);
+            Company company = user.getCompany();
+
+            if (company != null) {
+                company.getUserList().add(user);
+                em.merge(company);
+            }
+
             trans.commit();
         } catch (Exception e) {
             trans.rollback();
         } finally {
             em.close();
-        } 
+        }
     }
 
     public void update(User user) {
@@ -101,23 +104,25 @@ public class UserDB {
             em.close();
         }
     }
-    
+
     public void delete(User user) {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
         EntityTransaction trans = em.getTransaction();
-        
-        Company company = user.getCompany();
-        company.getUserList().remove(user);
-        
+
         try {
             trans.begin();
             em.remove(em.merge(user));
-            em.merge(company);
+            Company company = user.getCompany();
+            
+            if (company != null) {
+                company.getUserList().remove(user);
+                em.merge(company);
+            }
             trans.commit();
         } catch (Exception e) {
             trans.rollback();
         } finally {
             em.close();
-        } 
+        }
     }
 }

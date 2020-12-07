@@ -18,10 +18,18 @@ public class RegisterServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String uuid = request.getParameter("uuid");
+        String login = request.getParameter("login");
+        
+        if (login != null) {
+            response.sendRedirect("login");
+            return;
+        }
 
         if (uuid != null) {
             AccountService as = new AccountService();
-            boolean activated = as.activateUser(uuid);
+            String path = getServletContext().getRealPath("/WEB-INF");
+            String url = request.getRequestURL().toString();
+            boolean activated = as.activateUser(uuid, path, url);
             request.setAttribute("activated", activated);
         }
         getServletContext().getRequestDispatcher("/WEB-INF/registration.jsp").forward(request, response);

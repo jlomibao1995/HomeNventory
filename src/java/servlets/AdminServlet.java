@@ -36,12 +36,6 @@ public class AdminServlet extends HttpServlet {
             request.setAttribute("roles", roles);
         }
 
-        String roleUser = request.getParameter("updateRole");
-//        if (roleUser != null) {
-//            User user = as.getUser(roleUser);
-//            request.setAttribute("setCompany", user);
-//        }
-
         List<Company> companies = as.getCompanies();
         request.setAttribute("companies", companies);
 
@@ -91,7 +85,11 @@ public class AdminServlet extends HttpServlet {
         }
 
         if (!success) {
-            action = "fail";
+            if (action.equals("companyadmin")) {
+               action = "failcompanyadmin"; 
+            } else {
+                action = "fail";
+            }
         }
 
         request.setAttribute("message", action);

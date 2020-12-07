@@ -26,7 +26,7 @@
             <c:choose>
                 <c:when test="${success == true}">
                     <p>User added successfully.You will receive an email very soon.
-                        Please check your email for to activate your account.</p>
+                        Please check your email to activate your account.</p>
                     </c:when>
                     <c:when test="${success == false}">
                     <p>Encountered Error: Make sure all requirements are entered.</p>
