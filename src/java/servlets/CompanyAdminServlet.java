@@ -60,7 +60,7 @@ public class CompanyAdminServlet extends HttpServlet {
 
         switch (action) {
             case "delete":
-                success = as.deleteCompanyUser(email, adminEmail);
+                success = as.delete(email, adminEmail);
                 break;
             case "add":
                 success = as.addCompanyUser(email, password, firstName, lastNmae, company);

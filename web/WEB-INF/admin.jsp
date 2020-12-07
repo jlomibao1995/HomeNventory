@@ -28,6 +28,7 @@
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Role</th>
+                    <th>Company</th>
                     <th>Delete</th>
                     <th>Edit</th>
                     <th>Manage Roles</th>
@@ -38,6 +39,7 @@
                         <td>${account.firstName}</td>
                         <td>${account.lastName}</td>
                         <td>${account.role.roleName}</td>
+                        <td>${account.company.companyName}</td>
 
                         <td>
                             <form action="admin" method="post">
@@ -62,8 +64,9 @@
                                         <input type="hidden" name="roleUser" value="${account.email}">
                                         <input type="submit" value="Demote to Regular User"><br>
                                     </form>
-                                    <form action="admin" method="get">
-                                        <input type="hidden" name="updateRole" value="${account.email}">
+                                    <form action="admin" method="post">
+                                        <input type="hidden" name="action" value="companyadmin">
+                                        <input type="hidden" name="roleUser" value="${account.email}">
                                         <input type="submit" value="Demote to Company Admin"><br>
                                     </form>
                                 </c:when>
@@ -85,8 +88,9 @@
                                         <input type="hidden" name="roleUser" value="${account.email}">
                                         <input type="submit" value="Promote to System Admin"><br>
                                     </form>
-                                        <form action="admin" method="get">
-                                        <input type="hidden" name="updateRole" value="${account.email}">
+                                        <form action="admin" method="post">
+                                            <input type="hidden" name="action" value="companyadmin">
+                                        <input type="hidden" name="roleUser" value="${account.email}">
                                         <input type="submit" value="Promote to Company Admin"><br>
                                     </form>
                                 </c:otherwise>
@@ -106,7 +110,7 @@
                 Password: <input type="text" name="password"><br>
                 Company: <select name="companyId">
                     <c:forEach items="${companies}" var="company">
-                        <option value="company.companyId">${company.companyName}</option>
+                        <option value="${company.companyId}">${company.companyName}</option>
                     </c:forEach>
                 </select><br>
                 <input hidden="hidden" name="action" value="add">
@@ -132,30 +136,7 @@
                             </c:if>
                             >Non-active</option>
                 </select><br>
-                Company: <select name="companyId">
-                    <c:forEach items="${companies}" var="company">
-                        <option value="company.companyId">${company.companyName}</option>
-                    </c:forEach>
-                </select>
                 <input hidden="hidden" name="action" value="edit">
-                <input type="submit" value="Save">
-            </form>
-            <form action="admin" method="get">
-                <input type="submit" value="Cancel">
-            </form>
-        </c:if>
-
-        <c:if test="${setCompany != null}">
-            <h3>Promote to Company Admin</h3>
-            <form action="admin" method="post">
-                <p>Select company for ${setCompany.firstName} ${setCompany.lastName}</p>
-                <select name="companyId">
-                    <c:forEach items="${companies}" var="company">
-                        <option value="${company.companyId}">${company.companyName}</option>
-                    </c:forEach>  
-                </select><br>
-                <input type="hidden" name="roleUser" value="${setCompany.email}">
-                <input type="hidden" name="action" value="companyadmin">
                 <input type="submit" value="Save">
             </form>
             <form action="admin" method="get">

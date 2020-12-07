@@ -55,23 +55,4 @@ public class CompanyDB {
             em.close();
         }       
     }
-    
-    public void delete(User user) {
-        EntityManager em = DBUtil.getEmFactory().createEntityManager();
-        EntityTransaction trans = em.getTransaction();
-        
-        Company company = user.getCompany();
-        company.getUserList().remove(user);
-        
-        try {
-            trans.begin();
-            em.remove(em.merge(user));
-            em.merge(company);
-            trans.commit();
-        } catch (Exception e) {
-            trans.rollback();
-        } finally {
-            em.close();
-        } 
-    }
 }

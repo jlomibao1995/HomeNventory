@@ -37,10 +37,10 @@ public class AdminServlet extends HttpServlet {
         }
 
         String roleUser = request.getParameter("updateRole");
-        if (roleUser != null) {
-            User user = as.getUser(roleUser);
-            request.setAttribute("setCompany", user);
-        }
+//        if (roleUser != null) {
+//            User user = as.getUser(roleUser);
+//            request.setAttribute("setCompany", user);
+//        }
 
         List<Company> companies = as.getCompanies();
         request.setAttribute("companies", companies);
@@ -80,13 +80,13 @@ public class AdminServlet extends HttpServlet {
                 }
                 break;
             case "systemadmin":
-                success = as.changeRole(roleUser, 1, null);
+                success = as.changeRole(roleUser, 1);
                 break;
             case "companyadmin":
-                success = as.changeRole(roleUser, 3, null);
+                success = as.changeRole(roleUser, 3);
                 break;
             case "regularuser":
-                success = as.changeRole(roleUser, 2, companyId);
+                success = as.changeRole(roleUser, 2);
 
         }
 
@@ -95,7 +95,7 @@ public class AdminServlet extends HttpServlet {
         }
 
         request.setAttribute("message", action);
-        this.doGet(request, response);
+        doGet(request, response);
     }
 
 }

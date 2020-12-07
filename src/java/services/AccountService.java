@@ -285,44 +285,16 @@ public class AccountService {
         }
         return true;
     }
-    
-    public boolean deleteCompanyUser(String email, String accountEmail) {
-        if (email == null || email.equals("")) {
-            return false;
-        }
 
-        try {
-            UserDB ud = new UserDB();
-            User user = ud.getUser(email);
-
-            if (user.getEmail().equals(accountEmail)) {
-                return false;
-            }
-            
-            CompanyDB cd = new CompanyDB();
-
-            cd.delete(user);
-        } catch (Exception e) {
-            return false;
-        }
-        return true;
-    }
-
-    public boolean changeRole(String email, int roleId, String companyId) {
+    public boolean changeRole(String email, int roleId) {
         UserDB ub = new UserDB();
         User user = ub.getUser(email);
 
         try {
-            if (companyId != null) {
-                int id = Integer.parseInt(companyId);
-                CompanyDB cb = new CompanyDB();
-                Company company = cb.getCompany(id);
-                user.setCompany(company);
-                cb.updateUser(user);
-            } else {
+
                 user.setRole(new Role(roleId));
                 ub.update(user);
-            }
+
 
             return true;
         } catch (Exception e) {
