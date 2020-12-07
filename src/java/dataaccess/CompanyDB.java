@@ -36,23 +36,4 @@ public class CompanyDB {
             em.close();
         }
     }
-    
-    public void updateUser(User user) {
-        EntityManager em = DBUtil.getEmFactory().createEntityManager();
-        EntityTransaction trans = em.getTransaction();
-        
-        Company company = user.getCompany();
-        company.getUserList().add(user);
-        
-        try {
-            trans.begin();
-            em.merge(user);
-            em.merge(company);
-            trans.commit();
-        } catch (Exception e) {
-
-        } finally {
-            em.close();
-        }       
-    }
 }

@@ -67,7 +67,7 @@ public class AdminServlet extends HttpServlet {
                 break;
             case "edit":
                 String active = request.getParameter("active");
-                User user = as.updateUser(email, firstName, lastNmae, password, active);
+                User user = as.updateUser(email, firstName, lastNmae, password, active, companyId);
 
                 if (user != null) {
                     success = true;

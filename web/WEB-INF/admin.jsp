@@ -88,14 +88,15 @@
                                         <input type="hidden" name="roleUser" value="${account.email}">
                                         <input type="submit" value="Promote to System Admin"><br>
                                     </form>
-                                        <form action="admin" method="post">
-                                            <input type="hidden" name="action" value="companyadmin">
+                                    <form action="admin" method="post">
+                                        <input type="hidden" name="action" value="companyadmin">
                                         <input type="hidden" name="roleUser" value="${account.email}">
                                         <input type="submit" value="Promote to Company Admin"><br>
                                     </form>
                                 </c:otherwise>
                             </c:choose>
                         </td>
+
                     </tr>
                 </c:forEach>
             </table>
@@ -108,12 +109,14 @@
                 First Name: <input type="text" name="firstname"><br>
                 Last name: <input type="text" name="lastname"><br>
                 Password: <input type="text" name="password"><br>
+
                 Company: <select name="companyId">
                     <option value="0">None</option>
                     <c:forEach items="${companies}" var="company">
                         <option value="${company.companyId}">${company.companyName}</option>
                     </c:forEach>
                 </select><br>
+
                 <input hidden="hidden" name="action" value="add">
                 <input type="submit" value="Save">
             </form>
@@ -126,6 +129,15 @@
                 First Name: <input type="text" name="firstname" value="${updateUser.firstName}"><br>
                 Last name: <input type="text" name="lastname" value="${updateUser.lastName}"><br>
                 Password: <input type="text" name="password" placeholder="Enter new password or leave blank"><br>
+
+                Company: <select name="companyId">
+                    <option value="0">None</option>
+                    <c:forEach items="${companies}" var="company">
+                        <option value="${company.companyId}"
+                                <c:if test="${updateUser.company.companyId == company.companyId}">selected</c:if>
+                                >${company.companyName}</option>
+                    </c:forEach>
+                </select><br>    
                 Active: <select name="active">
                     <option value="true" 
                             <c:if test="${updateUser.active == true}">
@@ -137,6 +149,7 @@
                             </c:if>
                             >Non-active</option>
                 </select><br>
+
                 <input hidden="hidden" name="action" value="edit">
                 <input type="submit" value="Save">
             </form>

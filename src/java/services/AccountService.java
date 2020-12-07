@@ -246,7 +246,7 @@ public class AccountService {
         }
     }
 
-    public User updateUser(String email, String firstName, String lastName, String password, String active) {
+    public User updateUser(String email, String firstName, String lastName, String password, String active, String companyId) {
         if (firstName == null || firstName.equals("")
                 || lastName == null || lastName.equals("")) {
             return null;
@@ -270,8 +270,19 @@ public class AccountService {
             } else {
                 user.setActive(false);
             }
+            
+            Company oldCompany = user.getCompany();
+            
+            if (companyId.equals("0")) {
+                user.setCompany(null);
+                ub.update(user, oldCompany);
+            } else {
+                CompanyDB cd = new CompanyDB();
+                Company newCompany = cd.getCompany(Integer.parseInt(companyId));
+                user.setCompany(newCompany);
+                ub.update(user, oldCompany);
+            } 
 
-            ub.update(user);
             return user;
 
         } catch (Exception e) {
