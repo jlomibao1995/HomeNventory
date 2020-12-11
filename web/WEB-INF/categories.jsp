@@ -5,6 +5,16 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Home Inventory</title>
+        <style>
+            table, th, td {
+                border: 1px solid black;
+            }
+
+            .messages {
+                color: blue;
+                font-size: 15px;
+            }
+        </style>
     </head>
     <body>
         <h1>Home nVentory</h1>
@@ -22,6 +32,15 @@
         <h2>Categories</h2>
         <div>
             <h3>Manage Categories</h3>
+
+            <div class="messages">
+                <c:choose>
+                    <c:when test="${message eq 'add'}"><p>Category added.</p></c:when>
+                    <c:when test="${message eq 'save'}"><p>Category updated.</p></c:when>
+                    <c:when test="${message eq 'fail'}"><p>Error: Make sure all required fields are entered properly.</p></c:when>
+                </c:choose>
+            </div>
+
             <table>
                 <tr>
                     <td>Category Id</td>
@@ -67,10 +86,5 @@
                 </form>
             </c:if>
         </div>
-        <c:choose>
-            <c:when test="${message eq 'add'}"><p>Category added.</p></c:when>
-            <c:when test="${message eq 'save'}"><p>Category updated.</p></c:when>
-            <c:when test="${message eq 'fail'}"><p>Error: Make sure all required fields are entered properly.</p></c:when>
-        </c:choose>
     </body>
 </html>

@@ -5,6 +5,16 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Home Inventory</title>
+        <style>
+            table, th, td {
+                border: 1px solid black;
+            }
+            
+            .messages {
+                color: blue;
+                font-size: 15px;
+            }
+        </style>
     </head>
     <body>
         <h1>Home nVentory</h1>
@@ -20,6 +30,23 @@
             <a href="search">App Inventory</a>
         </div>
         <h2>Admin</h2>
+        
+        <div class="messages">
+            <c:choose>
+            <c:when test="${message eq 'add'}"><p>User added</p></c:when>
+            <c:when test="${message eq 'edit'}"><p>User updated</p></c:when>
+            <c:when test="${message eq 'delete'}"><p>User deleted</p</c:when>
+            <c:when test="${message eq 'systemadmin'}"><p>User has been promoted to system admin</p></c:when>
+            <c:when test="${message eq 'regularuser'}"><p>User has been demoted to regular user</p></c:when>
+            <c:when test="${message eq 'companyadmin'}"><p>User role has been changed to company administrator</p></c:when>
+            <c:when test="${message eq 'failcompanyadmin'}"><p>User cannot be a company admin without a company</p></c:when>
+            <c:when test="${message eq 'fail'}">
+                <p>Error: Make sure all required fields are entered properly</p>
+                <p>User account cannot be deleted</p>
+            </c:when>
+        </c:choose>
+        </div>
+        
         <div>
             <h3>Manage Users</h3>
             <table>
@@ -157,19 +184,5 @@
                 <input type="submit" value="Cancel">
             </form>
         </c:if>
-
-        <c:choose>
-            <c:when test="${message eq 'add'}"><p>User added.</p></c:when>
-            <c:when test="${message eq 'edit'}"><p>User updated.</p></c:when>
-            <c:when test="${message eq 'delete'}"><p>User deleted.</p></c:when>
-            <c:when test="${message eq 'systemadmin'}"><p>User has been promoted to system admin.</p></c:when>
-            <c:when test="${message eq 'regularuser'}"><p>User has been demoted to regular user.</p></c:when>
-            <c:when test="${message eq 'companyadmin'}"><p>User role has been changed to company administrator.</p></c:when>
-            <c:when test="${message eq 'failcompanyadmin'}"><p>User cannot be a company admin without a company.</p></c:when>
-            <c:when test="${message eq 'fail'}">
-                <p>Error: Make sure all required fields are entered properly.</p>
-                <p>User account cannot be deleted</p>
-            </c:when>
-        </c:choose>
     </body>
 </html>

@@ -13,8 +13,8 @@
             Password: <input type="password" name="password" value="${password}"><br>
             <input type="submit" values="Login">
         </form>
-        <a href="register">Register</a>
-        <a href="reset">Forgot password</a>
+        <p><a href="register">Register</a></p>
+        <p><a href="reset">Forgot password</a></p>
         <c:if test="${message != null}">
             <p>${message}</p>
         </c:if>

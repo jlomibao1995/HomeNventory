@@ -33,8 +33,6 @@
                     Email: <input type="text" name="email" value="${user.email}" readonly><br>
                     First Name: <input type="text" name="firstname" value="${user.firstName}"><br>
                     Last Name: <input type="text" name="lastname" value="${user.lastName}"><br>
-                    Password: <input type="text" name="password" placeholder="Enter new password or keep blank"><br>
-                    Confirm Password: <input type="text" name="confirmPassword" placeholder="Enter password"><br>
                     Active: <select name="active">
                         <option value="${true}" 
                                 <c:if test="${user.active == true}">
@@ -46,6 +44,9 @@
                                 </c:if>
                                 >Non-active</option>
                     </select><br>
+                    <p>Enter a new password or keep blank if password should be the same</p>
+                    Password: <input type="text" name="password" placeholder="Enter new password"><br>
+                    Confirm Password: <input type="text" name="confirmPassword" placeholder="Enter password"><br>
                     <input type="submit" value="Save">
                 </form>
                 <form action="account" method="get">

@@ -5,6 +5,16 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Home nVentory</title>
+        <style>
+            table, th, td {
+                border: 1px solid black;
+            }
+
+            .messages {
+                color: blue;
+                font-size: 15px;
+            }
+        </style>
     </head>
     <body>
         <h1>Home nVentory</h1>
@@ -19,6 +29,19 @@
         <h2>Company Admin</h2>
         <div>
             <h3>Manage Users for ${company.companyName}</h3>
+
+            <div class="messages">
+                <c:choose>
+                    <c:when test="${message eq 'add'}"><p>User added</p></c:when>
+                    <c:when test="${message eq 'edit'}"><p>User updated</p></c:when>
+                    <c:when test="${message eq 'delete'}"><p>User deleted</p></c:when>
+                    <c:when test="${message eq 'fail'}">
+                        <p>Error: Make sure all required fields are entered properly</p>
+                        <p>User account cannot be deleted</p>
+                    </c:when>
+                </c:choose>
+            </div>
+
             <table>
                 <tr>
                     <th>Email</th>
@@ -87,15 +110,5 @@
                 <input type="submit" value="Cancel">
             </form>
         </c:if>
-
-        <c:choose>
-            <c:when test="${message eq 'add'}"><p>User added.</p></c:when>
-            <c:when test="${message eq 'edit'}"><p>User updated.</p></c:when>
-            <c:when test="${message eq 'delete'}"><p>User deleted.</p></c:when>
-            <c:when test="${message eq 'fail'}">
-                <p>Error: Make sure all required fields are entered properly.</p>
-                <p>User account cannot be deleted</p>
-            </c:when>
-        </c:choose>
     </body>
 </html>

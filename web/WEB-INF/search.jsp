@@ -5,6 +5,15 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>App Inventory</title>
+        <style>
+            table, th, td {
+                border: 1px solid black;
+            }
+            .messages {
+                color: blue;
+                font-size: 15px;
+            }
+        </style>
     </head>
     <body>
         <h1>Home nVentory</h1>
@@ -25,7 +34,11 @@
             <input type="submit" value="Search">
         </form>
         <h2>Items</h2>
-        <table>
+        
+        <c:if test="${emptyList != null}"><p class="messages">No items for search result</p></c:if>
+        
+        <c:if test="${emptyList == null}">
+            <table>
             <tr>
                 <th>Id</th>
                 <th>Name</th>
@@ -41,5 +54,6 @@
                 </tr>
             </c:forEach>
         </table>
+        </c:if>
     </body>
 </html>

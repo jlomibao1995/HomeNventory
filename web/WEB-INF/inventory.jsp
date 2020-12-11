@@ -6,6 +6,16 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Home Inventory</title>
+        <style>
+            table, th, td {
+                border: 1px solid black;
+            }
+            
+            .messages {
+                color: blue;
+                font-size: 15px;
+            }
+        </style>
     </head>
     <body>
         <h1>Home nVentory</h1>
@@ -17,9 +27,19 @@
             <a href="login?log=logout">Logout</a><br>
         </div>
         <h2>Inventory</h2>
+        
+        <div class="messages">
+            <c:choose>
+                    <c:when test="${message eq 'add'}"><p>Item added</p></c:when>
+                    <c:when test="${message eq 'save'}"><p>Item updated</p></c:when>
+                    <c:when test="${message eq 'delete'}"><p>Item deleted</p></c:when>
+                    <c:when test="${message eq 'fail'}"><p>Error: Make sure all required fields are entered properly</p></c:when>
+                </c:choose>
+        </div>
+        
         <div>
             <h3>Inventory for ${user.firstName} ${user.lastName}</h3>
-            <c:if test="${emptyList != null}"><h3>${user.firstName} has no items in their inventory.Add an item below.</h3></c:if>
+            <c:if test="${emptyList != null}"><p class="messages">${user.firstName} has no items in their inventory<br>Add an item below</p></c:if>
             <c:if test="${user.itemList != null && emptyList == null}">
                 <table>
                     <tr>
@@ -79,17 +99,11 @@
                     </c:choose>
                     <input type="submit" value="Save">
                 </form>
-                <form action="categories" method="get">
+                <form action="inventory" method="get">
                     <input type="submit" value="Cancel">
                 </form>
-                <c:choose>
-                    <c:when test="${message eq 'add'}"><p>Item added.</p></c:when>
-                    <c:when test="${message eq 'save'}"><p>Item updated.</p></c:when>
-                    <c:when test="${message eq 'delete'}"><p>Item deleted.</p></c:when>
-                    <c:when test="${message eq 'fail'}"><p>Error: Make sure all required fields are entered properly.</p></c:when>
-                </c:choose>
             </div>
         </c:if>
-        <c:if test="${categories == null}"><h3>Could not obtain categories</h3></c:if>
+        <c:if test="${categories == null}"><h3 class="messages">Could not obtain categories</h3></c:if>
     </body>
 </html>

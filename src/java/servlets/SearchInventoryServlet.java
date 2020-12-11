@@ -22,6 +22,7 @@ public class SearchInventoryServlet extends HttpServlet {
         InventoryService is = new InventoryService();
         List<Item> items = is.getItems();
         request.setAttribute("items", items);
+        
         getServletContext().getRequestDispatcher("/WEB-INF/search.jsp").forward(request, response);
     }
 
@@ -39,6 +40,11 @@ public class SearchInventoryServlet extends HttpServlet {
         }
 
         request.setAttribute("items", items);
+        
+        if (items.size() == 0) {
+            request.setAttribute("emptyList", "emptyList");
+        }
+        
         request.setAttribute("q", key);
         getServletContext().getRequestDispatcher("/WEB-INF/search.jsp").forward(request, response);
 
