@@ -22,7 +22,7 @@ public class SearchInventoryServlet extends HttpServlet {
         InventoryService is = new InventoryService();
         List<Item> items = is.getItems();
         request.setAttribute("items", items);
-       getServletContext().getRequestDispatcher("/WEB-INF/search.jsp").forward(request, response);
+        getServletContext().getRequestDispatcher("/WEB-INF/search.jsp").forward(request, response);
     }
 
     @Override
@@ -31,17 +31,17 @@ public class SearchInventoryServlet extends HttpServlet {
         String key = request.getParameter("q");
         InventoryService is = new InventoryService();
         List<Item> items;
-        
+
         if (key != null && !key.equals("")) {
-           items = is.getItems(key);
+            items = is.getItems(key);
         } else {
             items = is.getItems();
         }
-        
+
         request.setAttribute("items", items);
         request.setAttribute("q", key);
         getServletContext().getRequestDispatcher("/WEB-INF/search.jsp").forward(request, response);
-        
+
     }
 
 }

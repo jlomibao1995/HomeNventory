@@ -19,46 +19,35 @@
         <h2>Inventory</h2>
         <div>
             <h3>Inventory for ${user.firstName} ${user.lastName}</h3>
-            <table class="blueTable">
-                <thead>
+            <table>
+                <tr>
+                    <th>Category</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Delete</th>
+                    <th>Edit</th>
+                </tr>
+                <c:forEach var="item" items="${user.itemList}">
                     <tr>
-                        <th>Category</th>
-                        <th>Name</th>
-                        <th>Price</th>
-                        <th>Delete</th>
-                        <th>Edit</th>
-                    </tr>
-                </thead>
-                <tfoot>
-                    <tr>
-                        <td colspan="3">
-                            <div class="links"><a href="#">&laquo;</a> <a class="active" href="#">1</a> <a href="#">2</a> <a href="#">3</a> <a href="#">4</a> <a href="#">&raquo;</a></div>
+                        <td>${item.category.categoryName}</td>
+                        <td>${item.itemName}</td>
+                        <td><fmt:formatNumber value="${item.price}" type="currency" /></td>
+                        <td>
+                            <form action="inventory" method="post">
+                                <input type="hidden" name="action" value="delete">
+                                <input type="hidden" name="itemid" value="${item.itemId}">
+                                <input type="submit" value="Delete">
+                            </form>
+                        </td>
+                        <td>
+                            <form action="inventory" method="get">
+                                <input type="hidden" name="action" value="edit">
+                                <input type="hidden" name="itemedit" value="${item.itemId}">
+                                <input type="submit" value="Edit">
+                            </form>
                         </td>
                     </tr>
-                </tfoot>
-                <tbody>
-                    <c:forEach var="item" items="${user.itemList}">
-                        <tr>
-                            <td>${item.category.categoryName}</td>
-                            <td>${item.itemName}</td>
-                            <td><fmt:formatNumber value="${item.price}" type="currency" /></td>
-                            <td>
-                                <form action="inventory" method="post">
-                                    <input type="hidden" name="action" value="delete">
-                                    <input type="hidden" name="itemid" value="${item.itemId}">
-                                    <input type="submit" value="Delete">
-                                </form>
-                            </td>
-                            <td>
-                                <form action="inventory" method="get">
-                                    <input type="hidden" name="action" value="edit">
-                                    <input type="hidden" name="itemedit" value="${item.itemId}">
-                                    <input type="submit" value="Edit">
-                                </form>
-                            </td>
-                        </tr>
-                    </c:forEach>
-                </tbody>
+                </c:forEach>
             </table>
         </div>
 

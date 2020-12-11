@@ -19,7 +19,7 @@ public class RegisterServlet extends HttpServlet {
             throws ServletException, IOException {
         String uuid = request.getParameter("uuid");
         String login = request.getParameter("login");
-        
+
         if (login != null) {
             response.sendRedirect("login");
             return;

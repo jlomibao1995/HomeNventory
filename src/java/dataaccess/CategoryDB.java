@@ -32,11 +32,11 @@ public class CategoryDB {
             em.close();
         }
     }
-    
+
     public void insert(Category category) {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
         EntityTransaction trans = em.getTransaction();
-        
+
         try {
             trans.begin();
             em.persist(category);
@@ -47,11 +47,11 @@ public class CategoryDB {
             em.close();
         }
     }
-    
+
     public void update(Category category) {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
         EntityTransaction trans = em.getTransaction();
-        
+
         try {
             trans.begin();
             em.merge(category);

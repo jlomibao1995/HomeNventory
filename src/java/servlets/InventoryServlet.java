@@ -64,7 +64,7 @@ public class InventoryServlet extends HttpServlet {
                 break;
             case "save":
                 success = is.updateItem(email, itemId, itemName, price, category);
-                
+
                 if (!success) {
                     Item item = is.getItem(itemId);
                     request.setAttribute("itemedit", item);

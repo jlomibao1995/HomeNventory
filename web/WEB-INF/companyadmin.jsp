@@ -15,8 +15,8 @@
             <a href="account">Account</a><br>
             <a href="login?log=logout">Logout</a><br>
         </div>
-        
-         <h2>Company Admin</h2>
+
+        <h2>Company Admin</h2>
         <div>
             <h3>Manage Users for ${company.companyName}</h3>
             <table>
@@ -49,8 +49,8 @@
                 </c:forEach>
             </table>
         </div>
-            
-         <c:if test="${updateUser == null}">
+
+        <c:if test="${updateUser == null}">
             <h3>Add User</h3>
             <form action="companyadmin" method="post">
                 Email: <input type="text" name="userEmail"><br>

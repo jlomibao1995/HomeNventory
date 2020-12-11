@@ -25,13 +25,13 @@ public class CompanyAdminFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain)
             throws IOException, ServletException {
-        
+
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpSession session = httpRequest.getSession();
         String email = (String) session.getAttribute("email");
         AccountService as = new AccountService();
         User user = as.getUser(email);
-        
+
         if (user.getRole().getRoleId() == 2) {
             HttpServletResponse httpResponse = (HttpServletResponse) response;
             httpResponse.sendRedirect("inventory");

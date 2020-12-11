@@ -20,13 +20,13 @@ public class LoginServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String log = request.getParameter("log");
-        
+
         if (log != null) {
             HttpSession session = request.getSession();
             session.invalidate();
             request.setAttribute("message", "User successfully logged out.");
         }
-        
+
         getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
     }
 
@@ -36,9 +36,9 @@ public class LoginServlet extends HttpServlet {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         AccountService as = new AccountService();
-        
+
         User user = as.login(email, password);
-        
+
         if (user == null) {
             request.setAttribute("email", email);
             request.setAttribute("password", password);
@@ -46,14 +46,13 @@ public class LoginServlet extends HttpServlet {
             this.getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, response);
             return;
         }
-        
+
         HttpSession session = request.getSession();
         session.setAttribute("email", email);
-        
-        if(user.getRole().getRoleId() == 2) {
+
+        if (user.getRole().getRoleId() == 2) {
             response.sendRedirect("inventory");
-        }
-        else if (user.getRole().getRoleId() == 1){
+        } else if (user.getRole().getRoleId() == 1) {
             response.sendRedirect("admin");
         } else {
             response.sendRedirect("companyadmin");

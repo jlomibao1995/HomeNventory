@@ -32,7 +32,7 @@ public class AdminFilter implements Filter {
         String email = (String) session.getAttribute("email");
         AccountService as = new AccountService();
         User user = as.getUser(email);
-        
+
         if (user.getRole().getRoleId() == 2) {
             HttpServletResponse httpResponse = (HttpServletResponse) response;
             httpResponse.sendRedirect("inventory");
@@ -42,7 +42,7 @@ public class AdminFilter implements Filter {
             httpResponse.sendRedirect("companyadmin");
             return;
         }
-        
+
         chain.doFilter(request, response);
     }
 

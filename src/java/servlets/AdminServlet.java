@@ -86,7 +86,7 @@ public class AdminServlet extends HttpServlet {
 
         if (!success) {
             if (action.equals("companyadmin")) {
-               action = "failcompanyadmin"; 
+                action = "failcompanyadmin";
             } else {
                 action = "fail";
             }

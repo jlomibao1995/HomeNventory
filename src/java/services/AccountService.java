@@ -270,9 +270,9 @@ public class AccountService {
             } else {
                 user.setActive(false);
             }
-            
+
             Company oldCompany = user.getCompany();
-            
+
             if (companyId.equals("0")) {
                 user.setCompany(null);
                 ub.update(user, oldCompany);
@@ -281,7 +281,7 @@ public class AccountService {
                 Company newCompany = cd.getCompany(Integer.parseInt(companyId));
                 user.setCompany(newCompany);
                 ub.update(user, oldCompany);
-            } 
+            }
 
             return user;
 

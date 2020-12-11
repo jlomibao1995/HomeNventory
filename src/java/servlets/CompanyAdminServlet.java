@@ -27,17 +27,17 @@ public class CompanyAdminServlet extends HttpServlet {
         AccountService as = new AccountService();
         User user = as.getUser(email);
         request.setAttribute("company", user.getCompany());
-        
+
         List<User> companyUsers = user.getCompany().getUserList();
         request.setAttribute("users", companyUsers);
-        
+
         String updateEmail = request.getParameter("updateEmail");
 
         if (updateEmail != null) {
             User updateUser = as.getUser(updateEmail);
             request.setAttribute("updateUser", updateUser);
         }
-        
+
         getServletContext().getRequestDispatcher("/WEB-INF/companyadmin.jsp").forward(request, response);
     }
 
@@ -49,7 +49,7 @@ public class CompanyAdminServlet extends HttpServlet {
         String firstName = request.getParameter("firstname");
         String lastNmae = request.getParameter("lastname");
         String password = request.getParameter("password");
-        
+
         HttpSession session = request.getSession();
         String adminEmail = (String) session.getAttribute("email");
         AccountService as = new AccountService();

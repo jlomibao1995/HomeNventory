@@ -47,7 +47,7 @@ public class ResetPasswordServlet extends HttpServlet {
                 } else {
                     request.setAttribute("action", action);
                 }
-                
+
                 getServletContext().getRequestDispatcher("/WEB-INF/reset.jsp").forward(request, response);
                 return;
             case "setpassword":
@@ -55,15 +55,15 @@ public class ResetPasswordServlet extends HttpServlet {
                 String confirmPassword = request.getParameter("confirmpassword");
                 String uuid = request.getParameter("uuid");
                 success = as.changePassword(uuid, newPassword, confirmPassword);
-                
+
                 if (!success) {
                     request.setAttribute("action", "fail");
                 } else {
                     request.setAttribute("action", action);
                 }
-                
+
                 getServletContext().getRequestDispatcher("/WEB-INF/resetNewPassword.jsp").forward(request, response);
         }
-        
+
     }
 }

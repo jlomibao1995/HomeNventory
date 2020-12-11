@@ -22,15 +22,15 @@ public class CategoriesServlet extends HttpServlet {
         InventoryService is = new InventoryService();
         List<Category> categories = is.getCategories();
         request.setAttribute("categories", categories);
-        
+
         String categoryId = request.getParameter("editCategory");
         if (categoryId != null) {
             Category category = is.getCategory(categoryId);
             request.setAttribute("category", category);
         }
-        
+
         getServletContext().getRequestDispatcher("/WEB-INF/categories.jsp").forward(request, response);
-        
+
     }
 
     @Override
@@ -40,7 +40,7 @@ public class CategoriesServlet extends HttpServlet {
         String categoryName = request.getParameter("categoryName");
         InventoryService is = new InventoryService();
         boolean success = false;
-        
+
         switch (action) {
             case "add":
                 success = is.addCategory(categoryName);
@@ -49,11 +49,11 @@ public class CategoriesServlet extends HttpServlet {
                 String categoryId = request.getParameter("categoryId");
                 success = is.updateCategory(categoryId, categoryName);
         }
-        
+
         if (!success) {
             action = "fail";
         }
-        
+
         request.setAttribute("message", action);
         this.doGet(request, response);
     }

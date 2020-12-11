@@ -11,57 +11,57 @@ import model.User;
  * @author Jean
  */
 public class ItemDB {
-    
+
     public Item getItem(int itemId) {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
         Item item = null;
-        
+
         try {
-            item = em.find(Item.class, itemId);            
+            item = em.find(Item.class, itemId);
         } finally {
             em.close();
         }
         return item;
     }
-    
+
     public List<Item> getAll() {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
-        
+
         try {
             List<Item> items = em.createNamedQuery("Item.findAll", Item.class).getResultList();
             return items;
         } catch (Exception e) {
 
-        }finally {
+        } finally {
             em.close();
         }
-        
+
         return null;
     }
-    
+
     public void insert(Item item) {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
         EntityTransaction trans = em.getTransaction();
-        
+
         User owner = item.getOwner();
         owner.getItemList().add(item);
-        
+
         try {
             trans.begin();
             em.persist(item);
             em.merge(owner);
             trans.commit();
-        }catch (Exception e) {
+        } catch (Exception e) {
             trans.rollback();
-        }finally {
+        } finally {
             em.close();
         }
     }
-    
+
     public void update(Item item) {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
         EntityTransaction trans = em.getTransaction();
-        
+
         try {
             trans.begin();
             em.merge(item);
@@ -69,15 +69,15 @@ public class ItemDB {
             trans.commit();
         } catch (Exception e) {
             trans.rollback();
-        }finally {
+        } finally {
             em.close();
         }
     }
-    
+
     public void delete(Item item) {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
         EntityTransaction trans = em.getTransaction();
-        
+
         try {
             User user = item.getOwner();
             user.getItemList().remove(item);
@@ -87,7 +87,7 @@ public class ItemDB {
             trans.commit();
         } catch (Exception e) {
             trans.rollback();
-        }finally {
+        } finally {
             em.close();
         }
     }

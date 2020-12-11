@@ -18,16 +18,16 @@
 
         <div>
             <c:if test="${edit == null}">
-            <h2>Account Information</h2>
-            <p>Name: ${user.firstName} ${user.lastName}</p>
-            <p>Email: ${user.email}</p>
-            <p>Role: ${user.role.roleName}</p>
-            <a href="account?edit=edit">Edit Information</a>
-        </c:if>
+                <h2>Account Information</h2>
+                <p>Name: ${user.firstName} ${user.lastName}</p>
+                <p>Email: ${user.email}</p>
+                <p>Role: ${user.role.roleName}</p>
+                <a href="account?edit=edit">Edit Information</a>
+            </c:if>
         </div>
         <c:if test="${result eq 'success'}">Account information updated.</c:if>
 
-        <div>
+            <div>
             <c:if test="${edit eq 'edit'}">
                 <form method="post" action="account">
                     Email: <input type="text" name="email" value="${user.email}" readonly><br>

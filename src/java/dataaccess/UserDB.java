@@ -104,33 +104,33 @@ public class UserDB {
             em.close();
         }
     }
-    
+
     public void update(User user, Company oldCompany) {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
         EntityTransaction trans = em.getTransaction();
-        
+
         try {
             trans.begin();
             em.merge(user);
-            
+
             Company company = user.getCompany();
-            
+
             if (company != null) {
                 company.getUserList().add(user);
                 em.merge(company);
             }
-            
+
             if (oldCompany != null) {
                 oldCompany.getUserList().remove(user);
                 em.merge(oldCompany);
             }
-            
+
             trans.commit();
         } catch (Exception e) {
 
         } finally {
             em.close();
-        }       
+        }
     }
 
     public void delete(User user) {
@@ -141,7 +141,7 @@ public class UserDB {
             trans.begin();
             em.remove(em.merge(user));
             Company company = user.getCompany();
-            
+
             if (company != null) {
                 company.getUserList().remove(user);
                 em.merge(company);
