@@ -19,8 +19,8 @@
         <h2>Inventory</h2>
         <div>
             <h3>Inventory for ${user.firstName} ${user.lastName}</h3>
-            <c:if test="${user.list == null}"><h2>${user.firstname} has no items in their inventory.Add an item below.</h2></c:if>
-            <c:if test="${user.list != null}">
+            <c:if test="${emptyList != null}"><h3>${user.firstName} has no items in their inventory.Add an item below.</h3></c:if>
+            <c:if test="${user.itemList != null && emptyList == null}">
                 <table>
                     <tr>
                         <th>Category</th>

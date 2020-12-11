@@ -27,6 +27,11 @@ public class InventoryServlet extends HttpServlet {
         AccountService as = new AccountService();
         String email = (String) session.getAttribute("email");
         User user = as.getUser(email);
+        
+        if (user.getItemList().size() == 0) {
+            request.setAttribute("emptyList", "emptyList");
+        }
+        
         request.setAttribute("user", user);
 
         InventoryService is = new InventoryService();

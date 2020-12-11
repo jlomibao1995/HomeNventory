@@ -26,34 +26,45 @@ public class AccountService {
         }
 
         UserDB ub = new UserDB();
-        User user = ub.getUser(email);
 
-        if (user != null && user.getActive()) {
-            try {
-                String salt = user.getSalt();
-                String hashPasswordAndSalt = PasswordUtil.hashAndSaltPassword(password, salt);
+        try {
+            User user = ub.getUser(email);
+            String salt = user.getSalt();
+            String hashPasswordAndSalt = PasswordUtil.hashAndSaltPassword(password, salt);
 
-                if (user.getPassword().equals(hashPasswordAndSalt)) {
-                    return user;
-                }
-                return null;
-            } catch (NoSuchAlgorithmException ex) {
-                Logger.getLogger(AccountService.class.getName()).log(Level.SEVERE, null, ex);
+            if (user.getPassword().equals(hashPasswordAndSalt) && user.getActive()) {
+                return user;
             }
+            return null;
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(AccountService.class.getName()).log(Level.WARNING, "Problem occured while logging in for user {0}", email);
+        } catch (Exception ex) {
+            Logger.getLogger(AccountService.class.getName()).log(Level.WARNING, "Could not return result for {0}", email);
         }
+
         return null;
     }
 
     public User getUser(String email) {
-        UserDB ub = new UserDB();
-        User user = ub.getUser(email);
-        return user;
+        try {
+            UserDB ub = new UserDB();
+            User user = ub.getUser(email);
+            return user;
+        } catch (Exception ex) {
+            Logger.getLogger(AccountService.class.getName()).log(Level.WARNING, "Could not find user {0}", email);
+            return null;
+        }
     }
 
     public List<User> getUsers() {
-        UserDB ub = new UserDB();
-        List<User> users = ub.getAll();
-        return users;
+        try {
+            UserDB ub = new UserDB();
+            List<User> users = ub.getAll();
+            return users;
+        } catch (Exception ex) {
+            Logger.getLogger(AccountService.class.getName()).log(Level.WARNING, "Could not get users");
+            return null;
+        }
     }
 
     public boolean addUser(String email, String password, String firstName, String lastName, String companyId) {
@@ -82,6 +93,7 @@ public class AccountService {
             db.insert(user);
             return true;
         } catch (Exception e) {
+            Logger.getLogger(AccountService.class.getName()).log(Level.WARNING, "Could not add user");
             return false;
         }
     }
@@ -105,6 +117,7 @@ public class AccountService {
             ud.insert(user);
             return true;
         } catch (Exception e) {
+            Logger.getLogger(AccountService.class.getName()).log(Level.WARNING, "Could not add company user");
             return false;
         }
     }
@@ -140,18 +153,17 @@ public class AccountService {
             GmailService.sendMail(email, subject, template, tags);
             return true;
         } catch (Exception e) {
-            Logger.getLogger(AccountService.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(AccountService.class.getName()).log(Level.WARNING, "Could not register user");
             return false;
         }
     }
 
     public boolean activateUser(String uuid, String path, String url) {
-        UserDB ub = new UserDB();
-        User user = ub.getUserByActivateUUID(uuid);
-        user.setActive(true);
-        user.setActivateUserUuid(null);
-
         try {
+            UserDB ub = new UserDB();
+            User user = ub.getUserByActivateUUID(uuid);
+            user.setActive(true);
+            user.setActivateUserUuid(null);
             ub.update(user);
             String subject = "Home nVentory App Activate Account";
             String template = path + "/emailtemplates/activate.html";
@@ -164,7 +176,7 @@ public class AccountService {
             GmailService.sendMail(user.getEmail(), subject, template, tags);
             return true;
         } catch (Exception e) {
-            Logger.getLogger(AccountService.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(AccountService.class.getName()).log(Level.WARNING, "Problem activating user with uuid: {0}", uuid);
             return false;
         }
     }
@@ -190,6 +202,7 @@ public class AccountService {
             return true;
 
         } catch (Exception e) {
+            Logger.getLogger(AccountService.class.getName()).log(Level.WARNING, "Problem with resetting password for user: {0}", email);
             return false;
         }
     }
@@ -209,6 +222,7 @@ public class AccountService {
             ub.update(user);
             return true;
         } catch (Exception e) {
+            Logger.getLogger(AccountService.class.getName()).log(Level.WARNING, "Problem changing password for user with uuid: {0}", uuid);
             return false;
         }
     }
@@ -242,6 +256,7 @@ public class AccountService {
             return user;
 
         } catch (Exception e) {
+            Logger.getLogger(AccountService.class.getName()).log(Level.WARNING, "Problem updating user account: {0}", email);
             return null;
         }
     }
@@ -286,6 +301,7 @@ public class AccountService {
             return user;
 
         } catch (Exception e) {
+            Logger.getLogger(AccountService.class.getName()).log(Level.WARNING, "Problem updating user account: {0}", email);
             return null;
         }
     }
@@ -305,16 +321,17 @@ public class AccountService {
 
             ub.delete(user);
         } catch (Exception e) {
+            Logger.getLogger(AccountService.class.getName()).log(Level.WARNING, "Problem deleting user account: {0}", email);
             return false;
         }
         return true;
     }
 
     public boolean changeRole(String email, int roleId) {
-        UserDB ub = new UserDB();
-        User user = ub.getUser(email);
 
         try {
+            UserDB ub = new UserDB();
+            User user = ub.getUser(email);
             if (user.getCompany() == null && roleId == 3) {
                 return false;
             }
@@ -323,19 +340,30 @@ public class AccountService {
 
             return true;
         } catch (Exception e) {
+            Logger.getLogger(AccountService.class.getName()).log(Level.WARNING, "Problem changing role for user account: {0}", email);
             return false;
         }
     }
 
     public List<Company> getCompanies() {
-        CompanyDB cb = new CompanyDB();
-        List<Company> companies = cb.getCompanies();
-        return companies;
+        try {
+            CompanyDB cb = new CompanyDB();
+            List<Company> companies = cb.getCompanies();
+            return companies;
+        } catch (Exception ex) {
+            Logger.getLogger(AccountService.class.getName()).log(Level.WARNING, "Problem getting companies");
+            return null;
+        }
     }
 
     public List<Role> getRoles() {
-        RoleDB rb = new RoleDB();
-        List<Role> roles = rb.getAll();
-        return roles;
+        try {
+            RoleDB rb = new RoleDB();
+            List<Role> roles = rb.getAll();
+            return roles;
+        } catch (Exception ex) {
+            Logger.getLogger(AccountService.class.getName()).log(Level.WARNING, "Problem getting roles");
+            return null;
+        }
     }
 }

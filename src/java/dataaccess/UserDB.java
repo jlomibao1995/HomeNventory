@@ -14,14 +14,12 @@ import model.User;
  */
 public class UserDB {
 
-    public User getUser(String email) {
+    public User getUser(String email) throws Exception {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
         User user = null;
         try {
             user = em.find(User.class, email);
 
-        } catch (Exception e) {
-            Logger.getLogger(UserDB.class.getName()).log(Level.WARNING, "Could not return result for {0}", email);
         } finally {
             em.close();
         }
@@ -29,21 +27,18 @@ public class UserDB {
         return user;
     }
 
-    public User getUserByActivateUUID(String uuid) {
+    public User getUserByActivateUUID(String uuid) throws Exception {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
 
         try {
             User user = em.createNamedQuery("User.findByActivateUserUuid", User.class).setParameter("activateUserUuid", uuid).getSingleResult();
             return user;
-        } catch (Exception e) {
-            Logger.getLogger(UserDB.class.getName()).log(Level.WARNING, "Could not return result for {0}", uuid);
-            return null;
         } finally {
             em.close();
         }
     }
 
-    public User getUserByUUID(String uuid) {
+    public User getUserByUUID(String uuid) throws Exception {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
         User user = null;
         try {
@@ -54,18 +49,15 @@ public class UserDB {
         return user;
     }
 
-    public List<User> getAll() {
+    public List<User> getAll() throws Exception {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
         List<User> users = null;
         try {
             users = em.createNamedQuery("User.findAll", User.class).getResultList();
-        } catch (Exception e) {
-            Logger.getLogger(UserDB.class.getName()).log(Level.WARNING, "Could not return result for {0}", User.class.getName());
+            return users;
         } finally {
             em.close();
         }
-
-        return users;
     }
 
     public void insert(User user) {
@@ -85,6 +77,7 @@ public class UserDB {
             trans.commit();
         } catch (Exception e) {
             trans.rollback();
+            Logger.getLogger(UserDB.class.getName()).log(Level.WARNING, "Could not insert user");
         } finally {
             em.close();
         }
@@ -100,6 +93,7 @@ public class UserDB {
             trans.commit();
         } catch (Exception e) {
             trans.rollback();
+            Logger.getLogger(UserDB.class.getName()).log(Level.WARNING, "Could not update user");
         } finally {
             em.close();
         }
@@ -127,7 +121,8 @@ public class UserDB {
 
             trans.commit();
         } catch (Exception e) {
-
+            trans.rollback();
+            Logger.getLogger(UserDB.class.getName()).log(Level.WARNING, "Could not update user");
         } finally {
             em.close();
         }
@@ -149,6 +144,7 @@ public class UserDB {
             trans.commit();
         } catch (Exception e) {
             trans.rollback();
+            Logger.getLogger(UserDB.class.getName()).log(Level.WARNING, "Could not delete user");
         } finally {
             em.close();
         }

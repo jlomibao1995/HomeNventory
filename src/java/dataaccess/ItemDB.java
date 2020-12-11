@@ -14,7 +14,7 @@ import model.User;
  */
 public class ItemDB {
 
-    public Item getItem(int itemId) throws Exception{
+    public Item getItem(int itemId) throws Exception {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
         Item item = null;
 
@@ -26,7 +26,7 @@ public class ItemDB {
         return item;
     }
 
-    public List<Item> getAll() throws Exception{
+    public List<Item> getAll() throws Exception {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
 
         try {

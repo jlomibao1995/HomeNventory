@@ -12,18 +12,16 @@ import model.Role;
  */
 public class RoleDB {
 
-    public List<Role> getAll() {
+    public List<Role> getAll() throws Exception {
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
         List<Role> roles = null;
 
         try {
             roles = em.createNamedQuery("Role.findAll", Role.class).getResultList();
-        } catch (Exception e) {
-            Logger.getLogger(RoleDB.class.getName()).log(Level.WARNING, "Could not return result for {0}", Role.class.getName());
+            return roles;
         } finally {
             em.close();
         }
-        return roles;
     }
 
 }
