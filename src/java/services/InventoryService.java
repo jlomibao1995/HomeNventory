@@ -5,6 +5,8 @@ import dataaccess.ItemDB;
 import dataaccess.UserDB;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.Category;
 import model.Item;
 import model.User;
@@ -22,6 +24,7 @@ public class InventoryService {
             List<Category> list = cb.getAll();
             return list;
         } catch (Exception ex) {
+            Logger.getLogger(InventoryService.class.getName()).log(Level.WARNING, "Problem getting categories encountered.");
             return null;
         }
     }
@@ -33,6 +36,7 @@ public class InventoryService {
             Category category = cb.getCategory(categoryId);
             return category;
         } catch (Exception e) {
+            Logger.getLogger(InventoryService.class.getName()).log(Level.WARNING, "Problem getting a category.");
             return null;
         }
     }
@@ -49,6 +53,7 @@ public class InventoryService {
             cb.insert(category);
             return true;
         } catch (Exception e) {
+            Logger.getLogger(InventoryService.class.getName()).log(Level.WARNING, "Problem adding category {0}", categoryName);
             return false;
         }
     }
@@ -64,6 +69,7 @@ public class InventoryService {
             cb.update(new Category(id, categoryName));
             return true;
         } catch (Exception e) {
+            Logger.getLogger(InventoryService.class.getName()).log(Level.WARNING, "Problem with updating category {0}", categoryId);
             return false;
         }
     }
@@ -76,6 +82,7 @@ public class InventoryService {
             Item item = ib.getItem(id);
             return item;
         } catch (Exception e) {
+            Logger.getLogger(InventoryService.class.getName()).log(Level.WARNING, "Problem with getting item {0}", itemId);
             return null;
         }
     }
@@ -87,6 +94,7 @@ public class InventoryService {
             List<Item> items = ib.getAll();
             return items;
         } catch (Exception e) {
+            Logger.getLogger(InventoryService.class.getName()).log(Level.WARNING, "Problem with getting all items");
             return null;
         }
     }
@@ -106,6 +114,7 @@ public class InventoryService {
 
             return searchItems;
         } catch (Exception e) {
+            Logger.getLogger(InventoryService.class.getName()).log(Level.WARNING, "Problem with getting all items with key:{0}", key);
             return null;
         }
     }
@@ -130,6 +139,7 @@ public class InventoryService {
             ib.insert(item);
             return true;
         } catch (Exception e) {
+            Logger.getLogger(InventoryService.class.getName()).log(Level.WARNING, "Problem with adding item {0}", itemName);
             return false;
         }
     }
@@ -158,6 +168,7 @@ public class InventoryService {
             ib.update(item);
             return true;
         } catch (Exception e) {
+            Logger.getLogger(InventoryService.class.getName()).log(Level.WARNING, "Problem with updating item {0}", itemId);
             return false;
         }
     }
@@ -178,6 +189,7 @@ public class InventoryService {
             ib.delete(item);
             return true;
         } catch (Exception e) {
+            Logger.getLogger(InventoryService.class.getName()).log(Level.WARNING, "Problem with deleting item {0}", itemId);
             return false;
         }
     }

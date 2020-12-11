@@ -1,6 +1,8 @@
 package dataaccess;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import model.Category;
@@ -43,6 +45,7 @@ public class CategoryDB {
             trans.commit();
         } catch (Exception e) {
             trans.rollback();
+            Logger.getLogger(CategoryDB.class.getName()).log(Level.WARNING, "Problem inserting category encountered.");
         } finally {
             em.close();
         }
@@ -58,6 +61,7 @@ public class CategoryDB {
             trans.commit();
         } catch (Exception e) {
             trans.rollback();
+            Logger.getLogger(CategoryDB.class.getName()).log(Level.WARNING, "Problem updating category encountered.");
         } finally {
             em.close();
         }

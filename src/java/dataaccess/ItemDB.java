@@ -1,6 +1,8 @@
 package dataaccess;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import model.Item;
@@ -12,7 +14,7 @@ import model.User;
  */
 public class ItemDB {
 
-    public Item getItem(int itemId) {
+    public Item getItem(int itemId) throws Exception{
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
         Item item = null;
 
@@ -24,19 +26,15 @@ public class ItemDB {
         return item;
     }
 
-    public List<Item> getAll() {
+    public List<Item> getAll() throws Exception{
         EntityManager em = DBUtil.getEmFactory().createEntityManager();
 
         try {
             List<Item> items = em.createNamedQuery("Item.findAll", Item.class).getResultList();
             return items;
-        } catch (Exception e) {
-
         } finally {
             em.close();
         }
-
-        return null;
     }
 
     public void insert(Item item) {
@@ -53,6 +51,7 @@ public class ItemDB {
             trans.commit();
         } catch (Exception e) {
             trans.rollback();
+            Logger.getLogger(ItemDB.class.getName()).log(Level.WARNING, "Could not insert item");
         } finally {
             em.close();
         }
@@ -65,10 +64,10 @@ public class ItemDB {
         try {
             trans.begin();
             em.merge(item);
-            //em.merge(item.getOwner());
             trans.commit();
         } catch (Exception e) {
             trans.rollback();
+            Logger.getLogger(ItemDB.class.getName()).log(Level.WARNING, "Could not update item");
         } finally {
             em.close();
         }
@@ -87,6 +86,7 @@ public class ItemDB {
             trans.commit();
         } catch (Exception e) {
             trans.rollback();
+            Logger.getLogger(ItemDB.class.getName()).log(Level.WARNING, "Could not delete item");
         } finally {
             em.close();
         }
