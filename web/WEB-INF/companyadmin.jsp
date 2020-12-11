@@ -92,7 +92,10 @@
             <c:when test="${message eq 'add'}"><p>User added.</p></c:when>
             <c:when test="${message eq 'edit'}"><p>User updated.</p></c:when>
             <c:when test="${message eq 'delete'}"><p>User deleted.</p></c:when>
-            <c:when test="${message eq 'fail'}"><p>Error: Make sure all required fields are entered properly.</p></c:when>
+            <c:when test="${message eq 'fail'}">
+                <p>Error: Make sure all required fields are entered properly.</p>
+                <p>User account cannot be deleted</p>
+            </c:when>
         </c:choose>
     </body>
 </html>
